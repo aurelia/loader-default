@@ -57,7 +57,10 @@ var SystemJSLoader = (function (Loader) {
   _extends(SystemJSLoader, Loader);
 
   SystemJSLoader.prototype.loadModule = function (id) {
-    id = System.baseUrl + "/" + id;
+    if (!id.startsWith(System.baseUrl)) {
+      id = System.baseUrl + "/" + id;
+    }
+
     return System["import"](id);
   };
 

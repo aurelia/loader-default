@@ -40,7 +40,10 @@ Loader.createDefaultLoader = function(){
 
 export class SystemJSLoader extends Loader {
   loadModule(id){ 
-    id = System.baseUrl + '/' + id;
+    if(!id.startsWith(System.baseUrl)){
+      id = System.baseUrl + "/" + id;
+    }
+    
     return System.import(id);
   }
 
