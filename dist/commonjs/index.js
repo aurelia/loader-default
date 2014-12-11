@@ -13,7 +13,6 @@ var _extends = function (child, parent) {
 };
 
 var Origin = require('aurelia-metadata').Origin;
-var normalize = require('aurelia-metadata').normalize;
 var Loader = require('aurelia-loader').Loader;
 
 
@@ -25,12 +24,16 @@ System.instantiate = function (load) {
 
     m.execute = function () {
       var executed = execute.apply(m, arguments), key, exportedValue;
+      var target = executed;
 
-      for (key in executed) {
-        exportedValue = executed[key];
+      if (target.__useDefault) {
+        target = target["default"];
+      }
+
+      for (key in target) {
+        exportedValue = target[key];
 
         if (typeof exportedValue === "function") {
-          normalize(exportedValue);
           Origin.set(exportedValue, new Origin(load.name, key));
         }
       }
@@ -54,6 +57,7 @@ var SystemJSLoader = (function (Loader) {
   _extends(SystemJSLoader, Loader);
 
   SystemJSLoader.prototype.loadModule = function (id) {
+    id = System.baseUrl + "/" + id;
     return System["import"](id);
   };
 
@@ -61,7 +65,7 @@ var SystemJSLoader = (function (Loader) {
     var loads = [], i, ii, loader = this.loader;
 
     for (i = 0, ii = ids.length; i < ii; ++i) {
-      loads.push(System["import"](ids[i]));
+      loads.push(this.loadModule(ids[i]));
     }
 
     return Promise.all(loads);

@@ -14,7 +14,6 @@ define(["exports", "aurelia-metadata", "aurelia-loader"], function (exports, _au
   };
 
   var Origin = _aureliaMetadata.Origin;
-  var normalize = _aureliaMetadata.normalize;
   var Loader = _aureliaLoader.Loader;
 
 
@@ -26,12 +25,16 @@ define(["exports", "aurelia-metadata", "aurelia-loader"], function (exports, _au
 
       m.execute = function () {
         var executed = execute.apply(m, arguments), key, exportedValue;
+        var target = executed;
 
-        for (key in executed) {
-          exportedValue = executed[key];
+        if (target.__useDefault) {
+          target = target["default"];
+        }
+
+        for (key in target) {
+          exportedValue = target[key];
 
           if (typeof exportedValue === "function") {
-            normalize(exportedValue);
             Origin.set(exportedValue, new Origin(load.name, key));
           }
         }
@@ -55,6 +58,7 @@ define(["exports", "aurelia-metadata", "aurelia-loader"], function (exports, _au
     _extends(SystemJSLoader, Loader);
 
     SystemJSLoader.prototype.loadModule = function (id) {
+      id = System.baseUrl + "/" + id;
       return System["import"](id);
     };
 
@@ -62,7 +66,7 @@ define(["exports", "aurelia-metadata", "aurelia-loader"], function (exports, _au
       var loads = [], i, ii, loader = this.loader;
 
       for (i = 0, ii = ids.length; i < ii; ++i) {
-        loads.push(System["import"](ids[i]));
+        loads.push(this.loadModule(ids[i]));
       }
 
       return Promise.all(loads);
