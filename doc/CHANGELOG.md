@@ -1,3 +1,11 @@
+### 0.1.2 (2014-12-11)
+
+
+#### Bug Fixes
+
+* **package:** updating dependencies ([eb8b0aed](http://github.com/aurelia/loader-systemjs/commit/eb8b0aed667db21517eb02c26cfd57199cf03325))
+
+
 ### 0.1.1 (2014-12-11)
 
 
