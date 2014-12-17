@@ -65,7 +65,7 @@ export class SystemJSLoader extends Loader {
   }
 
   loadTemplate(url){
-    if(this.baseViewUrl){
+    if(this.baseViewUrl && !url.startsWith(this.baseViewUrl)){
       url = join(this.baseViewUrl, url);
     }
 
