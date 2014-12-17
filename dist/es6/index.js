@@ -1,5 +1,6 @@
 import {Origin} from 'aurelia-metadata';
 import {Loader} from 'aurelia-loader';
+import {join} from 'aurelia-path';
 
 //works for amd, commonjs and globals
 //instantiate returns undefined for es6 today; devs must use annotation: @Origin(__moduleName)
@@ -17,6 +18,7 @@ System.instantiate = function (load) {
 
       if(target.__useDefault){
         target = target['default'];
+        Origin.set(target, new Origin(load.name, 'default'));
       }
 
       for (key in target) {
@@ -39,9 +41,14 @@ Loader.createDefaultLoader = function(){
 };
 
 export class SystemJSLoader extends Loader {
+  constructor(){
+    this.baseUrl = System.baseUrl;
+    this.baseViewUrl = System.baseViewUrl || System.baseUrl;
+  }
+
   loadModule(id){ 
-    if(!id.startsWith(System.baseUrl)){
-      id = System.baseUrl + "/" + id;
+    if(this.baseUrl && !id.startsWith(this.baseUrl)){
+      id = join(this.baseUrl, id);
     }
     
     return System.import(id);
@@ -57,7 +64,11 @@ export class SystemJSLoader extends Loader {
     return Promise.all(loads);
   }
 
-  getBaseUrl(){
-    return System.baseUrl;
+  loadTemplate(url){
+    if(this.baseViewUrl && !url.startsWith(this.baseViewUrl)){
+      url = join(this.baseViewUrl, url);
+    }
+
+    return this.importTemplate(url);
   }
 }

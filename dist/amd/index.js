@@ -1,4 +1,4 @@
-define(["exports", "aurelia-metadata", "aurelia-loader"], function (exports, _aureliaMetadata, _aureliaLoader) {
+define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], function (exports, _aureliaMetadata, _aureliaLoader, _aureliaPath) {
   "use strict";
 
   var _extends = function (child, parent) {
@@ -15,6 +15,7 @@ define(["exports", "aurelia-metadata", "aurelia-loader"], function (exports, _au
 
   var Origin = _aureliaMetadata.Origin;
   var Loader = _aureliaLoader.Loader;
+  var join = _aureliaPath.join;
 
 
   var originalInstantiate = System.instantiate.bind(System);
@@ -29,6 +30,7 @@ define(["exports", "aurelia-metadata", "aurelia-loader"], function (exports, _au
 
         if (target.__useDefault) {
           target = target["default"];
+          Origin.set(target, new Origin(load.name, "default"));
         }
 
         for (key in target) {
@@ -52,14 +54,15 @@ define(["exports", "aurelia-metadata", "aurelia-loader"], function (exports, _au
 
   var SystemJSLoader = (function (Loader) {
     var SystemJSLoader = function SystemJSLoader() {
-      Loader.apply(this, arguments);
+      this.baseUrl = System.baseUrl;
+      this.baseViewUrl = System.baseViewUrl || System.baseUrl;
     };
 
     _extends(SystemJSLoader, Loader);
 
     SystemJSLoader.prototype.loadModule = function (id) {
-      if (!id.startsWith(System.baseUrl)) {
-        id = System.baseUrl + "/" + id;
+      if (this.baseUrl && !id.startsWith(this.baseUrl)) {
+        id = join(this.baseUrl, id);
       }
 
       return System["import"](id);
@@ -75,8 +78,12 @@ define(["exports", "aurelia-metadata", "aurelia-loader"], function (exports, _au
       return Promise.all(loads);
     };
 
-    SystemJSLoader.prototype.getBaseUrl = function () {
-      return System.baseUrl;
+    SystemJSLoader.prototype.loadTemplate = function (url) {
+      if (this.baseViewUrl && !url.startsWith(this.baseViewUrl)) {
+        url = join(this.baseViewUrl, url);
+      }
+
+      return this.importTemplate(url);
     };
 
     return SystemJSLoader;

@@ -1,3 +1,12 @@
+## 0.2.0 (2014-12-17)
+
+
+#### Bug Fixes
+
+* **loadTemplate:** check url has baseViewUrl ([fb06ca6b](http://github.com/aurelia/loader-systemjs/commit/fb06ca6be36d4fb36707e47e1ed35d546aa89557))
+* **package:** update dependencies to latest versions ([9da71e4c](http://github.com/aurelia/loader-systemjs/commit/9da71e4c9864138b3ce93bf6c8aa515086dfcfa8))
+
+
 ### 0.1.2 (2014-12-11)
 
 
