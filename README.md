@@ -9,6 +9,10 @@ This library is part of the [Aurelia](http://www.aurelia.io/) platform and conta
 * [aurelia-metadata](https://github.com/aurelia/metadata)
 * [aurelia-loader](https://github.com/aurelia/loader)
 
+## Used By
+
+* [aurelia-bootstrapper](https://github.com/aurelia/bootstrapper)
+
 ## Platform Support
 
 This library can be used in the **browser** only.

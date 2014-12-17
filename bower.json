@@ -1,0 +1,21 @@
+{
+  "name": "aurelia-loader-systemjs",
+  "version": "0.1.2",
+  "description": "An implementation of the loader interface using the system.js loader.",
+  "keywords": [
+    "aurelia",
+    "loader",
+    "modules"
+  ],
+  "homepage": "http://aurelia.io",
+  "license": "MIT",
+  "authors": ["Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)"],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/aurelia/loader-systemjs"
+  },
+  "dependencies": {
+    "aurelia-loader": "0.1.1",
+    "aurelia-metadata": "0.1.0"
+  }
+}

@@ -1,4 +1,4 @@
-import {SystemJSLoader} from '../lib/index';
+import {SystemJSLoader} from '../src/index';
 
 describe('the system.js loader', () => {
   it('should have some tests', () => {
