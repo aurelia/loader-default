@@ -1,3 +1,11 @@
+### 0.2.1 (2014-12-17)
+
+
+#### Bug Fixes
+
+* **package:** add missing dependency ([0462d8b2](http://github.com/aurelia/loader-systemjs/commit/0462d8b2bbd1509181bf1b394a88b85e929a68a1))
+
+
 ## 0.2.0 (2014-12-17)
 
 
