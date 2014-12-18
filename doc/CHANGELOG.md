@@ -1,3 +1,11 @@
+### 0.2.2 (2014-12-18)
+
+
+#### Bug Fixes
+
+* **package:** update to the latest version of path ([792ca4f5](http://github.com/aurelia/loader-systemjs/commit/792ca4f59104401ec52637648553ceb58746a808))
+
+
 ### 0.2.1 (2014-12-17)
 
 
