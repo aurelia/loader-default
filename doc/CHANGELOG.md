@@ -1,3 +1,11 @@
+### 0.3.1 (2015-01-06)
+
+
+#### Bug Fixes
+
+* **loader:** don't set target on frozen objects ([ebe91ff2](http://github.com/aurelia/loader-systemjs/commit/ebe91ff2024833c79386d59d0c3a42baad4ddedf))
+
+
 ## 0.3.0 (2015-01-06)
 
 

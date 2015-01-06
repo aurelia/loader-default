@@ -38,7 +38,9 @@ System.instantiate = function (load) {
         return executed;
       }
 
-      Origin.set(target, new Origin(load.name, "default"));
+      if (!Object.isFrozen(target)) {
+        Origin.set(target, new Origin(load.name, "default"));
+      }
 
       for (key in target) {
         exportedValue = target[key];
