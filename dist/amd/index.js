@@ -1,8 +1,11 @@
 define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], function (exports, _aureliaMetadata, _aureliaLoader, _aureliaPath) {
   "use strict";
 
-  var _extends = function (child, parent) {
-    child.prototype = Object.create(parent.prototype, {
+  var _inherits = function (child, parent) {
+    if (typeof parent !== "function" && parent !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof parent);
+    }
+    child.prototype = Object.create(parent && parent.prototype, {
       constructor: {
         value: child,
         enumerable: false,
@@ -10,7 +13,7 @@ define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], functi
         configurable: true
       }
     });
-    child.__proto__ = parent;
+    if (parent) child.__proto__ = parent;
   };
 
   var Origin = _aureliaMetadata.Origin;
@@ -30,8 +33,13 @@ define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], functi
 
         if (target.__useDefault) {
           target = target["default"];
-          Origin.set(target, new Origin(load.name, "default"));
         }
+
+        if (target === window) {
+          return executed;
+        }
+
+        Origin.set(target, new Origin(load.name, "default"));
 
         for (key in target) {
           exportedValue = target[key];
@@ -52,17 +60,20 @@ define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], functi
     return new SystemJSLoader();
   };
 
-  var SystemJSLoader = (function (Loader) {
+  var SystemJSLoader = (function () {
+    var _Loader = Loader;
     var SystemJSLoader = function SystemJSLoader() {
       this.baseUrl = System.baseUrl;
       this.baseViewUrl = System.baseViewUrl || System.baseUrl;
     };
 
-    _extends(SystemJSLoader, Loader);
+    _inherits(SystemJSLoader, _Loader);
 
-    SystemJSLoader.prototype.loadModule = function (id) {
-      if (this.baseUrl && !id.startsWith(this.baseUrl)) {
-        id = join(this.baseUrl, id);
+    SystemJSLoader.prototype.loadModule = function (id, baseUrl) {
+      baseUrl = baseUrl === undefined ? this.baseUrl : baseUrl;
+
+      if (baseUrl && !id.startsWith(baseUrl)) {
+        id = join(baseUrl, id);
       }
 
       return System["import"](id);
@@ -87,7 +98,7 @@ define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], functi
     };
 
     return SystemJSLoader;
-  })(Loader);
+  })();
 
   exports.SystemJSLoader = SystemJSLoader;
 });

@@ -1,3 +1,12 @@
+## 0.3.0 (2015-01-06)
+
+
+#### Features
+
+* **build:** update compiler and switch to register module format ([762fbfc9](http://github.com/aurelia/loader-systemjs/commit/762fbfc9c463b612d0b286526735da138be90b78))
+* **loader:** add loadModule base url override ([d11cb589](http://github.com/aurelia/loader-systemjs/commit/d11cb58926777ec6b5a41c9dcc0a815b6c09e5f5))
+
+
 ### 0.2.2 (2014-12-18)
 
 

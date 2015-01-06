@@ -1,6 +1,6 @@
 {
   "name": "aurelia-loader-systemjs",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "An implementation of the loader interface using the system.js loader.",
   "keywords": [
     "aurelia",

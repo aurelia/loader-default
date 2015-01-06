@@ -18,8 +18,13 @@ System.instantiate = function (load) {
 
       if(target.__useDefault){
         target = target['default'];
-        Origin.set(target, new Origin(load.name, 'default'));
       }
+
+      if(target === window){
+        return executed;
+      }
+
+      Origin.set(target, new Origin(load.name, 'default'));
 
       for (key in target) {
         exportedValue = target[key];
@@ -46,9 +51,11 @@ export class SystemJSLoader extends Loader {
     this.baseViewUrl = System.baseViewUrl || System.baseUrl;
   }
 
-  loadModule(id){ 
-    if(this.baseUrl && !id.startsWith(this.baseUrl)){
-      id = join(this.baseUrl, id);
+  loadModule(id, baseUrl){
+    baseUrl = baseUrl === undefined ? this.baseUrl : baseUrl;
+
+    if(baseUrl && !id.startsWith(baseUrl)){
+      id = join(baseUrl, id);
     }
     
     return System.import(id);

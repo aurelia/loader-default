@@ -1,7 +1,10 @@
 "use strict";
 
-var _extends = function (child, parent) {
-  child.prototype = Object.create(parent.prototype, {
+var _inherits = function (child, parent) {
+  if (typeof parent !== "function" && parent !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof parent);
+  }
+  child.prototype = Object.create(parent && parent.prototype, {
     constructor: {
       value: child,
       enumerable: false,
@@ -9,12 +12,12 @@ var _extends = function (child, parent) {
       configurable: true
     }
   });
-  child.__proto__ = parent;
+  if (parent) child.__proto__ = parent;
 };
 
-var Origin = require('aurelia-metadata').Origin;
-var Loader = require('aurelia-loader').Loader;
-var join = require('aurelia-path').join;
+var Origin = require("aurelia-metadata").Origin;
+var Loader = require("aurelia-loader").Loader;
+var join = require("aurelia-path").join;
 
 
 var originalInstantiate = System.instantiate.bind(System);
@@ -29,8 +32,13 @@ System.instantiate = function (load) {
 
       if (target.__useDefault) {
         target = target["default"];
-        Origin.set(target, new Origin(load.name, "default"));
       }
+
+      if (target === window) {
+        return executed;
+      }
+
+      Origin.set(target, new Origin(load.name, "default"));
 
       for (key in target) {
         exportedValue = target[key];
@@ -51,17 +59,20 @@ Loader.createDefaultLoader = function () {
   return new SystemJSLoader();
 };
 
-var SystemJSLoader = (function (Loader) {
+var SystemJSLoader = (function () {
+  var _Loader = Loader;
   var SystemJSLoader = function SystemJSLoader() {
     this.baseUrl = System.baseUrl;
     this.baseViewUrl = System.baseViewUrl || System.baseUrl;
   };
 
-  _extends(SystemJSLoader, Loader);
+  _inherits(SystemJSLoader, _Loader);
 
-  SystemJSLoader.prototype.loadModule = function (id) {
-    if (this.baseUrl && !id.startsWith(this.baseUrl)) {
-      id = join(this.baseUrl, id);
+  SystemJSLoader.prototype.loadModule = function (id, baseUrl) {
+    baseUrl = baseUrl === undefined ? this.baseUrl : baseUrl;
+
+    if (baseUrl && !id.startsWith(baseUrl)) {
+      id = join(baseUrl, id);
     }
 
     return System["import"](id);
@@ -86,6 +97,6 @@ var SystemJSLoader = (function (Loader) {
   };
 
   return SystemJSLoader;
-})(Loader);
+})();
 
 exports.SystemJSLoader = SystemJSLoader;
