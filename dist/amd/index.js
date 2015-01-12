@@ -1,6 +1,11 @@
 define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], function (exports, _aureliaMetadata, _aureliaLoader, _aureliaPath) {
   "use strict";
 
+  var _prototypeProperties = function (child, staticProps, instanceProps) {
+    if (staticProps) Object.defineProperties(child, staticProps);
+    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+  };
+
   var _inherits = function (child, parent) {
     if (typeof parent !== "function" && parent !== null) {
       throw new TypeError("Super expression must either be null or a function, not " + typeof parent);
@@ -62,45 +67,59 @@ define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], functi
     return new SystemJSLoader();
   };
 
-  var SystemJSLoader = (function () {
-    var _Loader = Loader;
+  var SystemJSLoader = (function (Loader) {
     var SystemJSLoader = function SystemJSLoader() {
       this.baseUrl = System.baseUrl;
       this.baseViewUrl = System.baseViewUrl || System.baseUrl;
     };
 
-    _inherits(SystemJSLoader, _Loader);
+    _inherits(SystemJSLoader, Loader);
 
-    SystemJSLoader.prototype.loadModule = function (id, baseUrl) {
-      baseUrl = baseUrl === undefined ? this.baseUrl : baseUrl;
+    _prototypeProperties(SystemJSLoader, null, {
+      loadModule: {
+        value: function (id, baseUrl) {
+          baseUrl = baseUrl === undefined ? this.baseUrl : baseUrl;
 
-      if (baseUrl && !id.startsWith(baseUrl)) {
-        id = join(baseUrl, id);
+          if (baseUrl && !id.startsWith(baseUrl)) {
+            id = join(baseUrl, id);
+          }
+
+          return System["import"](id);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      loadAllModules: {
+        value: function (ids) {
+          var loads = [], i, ii, loader = this.loader;
+
+          for (i = 0, ii = ids.length; i < ii; ++i) {
+            loads.push(this.loadModule(ids[i]));
+          }
+
+          return Promise.all(loads);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      loadTemplate: {
+        value: function (url) {
+          if (this.baseViewUrl && !url.startsWith(this.baseViewUrl)) {
+            url = join(this.baseViewUrl, url);
+          }
+
+          return this.importTemplate(url);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
       }
-
-      return System["import"](id);
-    };
-
-    SystemJSLoader.prototype.loadAllModules = function (ids) {
-      var loads = [], i, ii, loader = this.loader;
-
-      for (i = 0, ii = ids.length; i < ii; ++i) {
-        loads.push(this.loadModule(ids[i]));
-      }
-
-      return Promise.all(loads);
-    };
-
-    SystemJSLoader.prototype.loadTemplate = function (url) {
-      if (this.baseViewUrl && !url.startsWith(this.baseViewUrl)) {
-        url = join(this.baseViewUrl, url);
-      }
-
-      return this.importTemplate(url);
-    };
+    });
 
     return SystemJSLoader;
-  })();
+  })(Loader);
 
   exports.SystemJSLoader = SystemJSLoader;
 });

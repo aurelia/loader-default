@@ -1,3 +1,11 @@
+### 0.3.2 (2015-01-12)
+
+
+#### Bug Fixes
+
+* **package:** update Aurelia dependencies ([21511995](http://github.com/aurelia/loader-systemjs/commit/21511995ac06d523417bee3d9b061816479c0120))
+
+
 ### 0.3.1 (2015-01-06)
 
 
