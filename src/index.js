@@ -2,46 +2,46 @@ import {Origin} from 'aurelia-metadata';
 import {Loader} from 'aurelia-loader';
 import {join} from 'aurelia-path';
 
-//works for amd, commonjs and globals
-//instantiate returns undefined for es6 today; devs must use annotation: @Origin(__moduleName)
-//Let's try to get the ES6 Module Loader spec fixed so that it's consistent!
+if(!window.System || !window.System.import){
+  var sys = window.System = window.System || {};
+  sys.polyfilled = true;
+  sys.map = {};
+  sys['import'] = function(moduleId){
+    return new Promise((resolve, reject) => {
+      require([moduleId], resolve, reject);
+    });
+  };
+  sys.normalize = function(url){
+    return Promise.resolve(url);
+  };
+}
 
-var originalInstantiate = System.instantiate.bind(System);
+function ensureOriginOnExports(executed, name){
+  var target = executed,
+      key, exportedValue;
 
-System.instantiate = function (load) {
-  return originalInstantiate(load).then(function (m) {
-    var execute = m.execute;
+  if(target.__useDefault){
+    target = target['default'];
+  }
 
-    m.execute = function () {
-      var executed = execute.apply(m, arguments), key, exportedValue;
-      var target = executed;
+  if(target === window){
+    return executed;
+  }
 
-      if(target.__useDefault){
-        target = target['default'];
-      }
+  if(!Object.isFrozen(target)){
+    Origin.set(target, new Origin(name, 'default'));
+  }
+  
+  for (key in target) {
+    exportedValue = target[key];
 
-      if(target === window){
-        return executed;
-      }
+    if (typeof exportedValue === "function") {
+      Origin.set(exportedValue, new Origin(name, key));
+    }
+  }
 
-      if(!Object.isFrozen(target)){
-        Origin.set(target, new Origin(load.name, 'default'));
-      }
-      
-      for (key in target) {
-        exportedValue = target[key];
-
-        if (typeof exportedValue === "function") {
-          Origin.set(exportedValue, new Origin(load.name, key));
-        }
-      }
-
-      return executed;
-    };
-
-    return m;
-  });
-};
+  return executed;
+}
 
 Loader.createDefaultLoader = function(){
   return new SystemJSLoader();
@@ -51,6 +51,7 @@ export class SystemJSLoader extends Loader {
   constructor(){
     this.baseUrl = System.baseUrl;
     this.baseViewUrl = System.baseViewUrl || System.baseUrl;
+    this.registry = {};
   }
 
   loadModule(id, baseUrl){
@@ -60,7 +61,17 @@ export class SystemJSLoader extends Loader {
       id = join(baseUrl, id);
     }
     
-    return System.import(id);
+    return System.normalize(id).then(newId => {
+      var existing = this.registry[newId];
+      if(existing){
+        return existing;
+      }
+
+      return System.import(newId).then(m => {
+        this.registry[newId] = m;
+        return ensureOriginOnExports(m, newId);
+      });
+    });
   }
 
   loadAllModules(ids){ 
