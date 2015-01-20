@@ -24,13 +24,7 @@ function ensureOriginOnExports(executed, name){
     target = target['default'];
   }
 
-  if(target === window){
-    return executed;
-  }
-
-  if(!Object.isFrozen(target)){
-    Origin.set(target, new Origin(name, 'default'));
-  }
+  Origin.set(target, new Origin(name, 'default'));
   
   for (key in target) {
     exportedValue = target[key];
