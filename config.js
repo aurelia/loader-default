@@ -2,7 +2,7 @@ System.config({
   "paths": {
     "*": "*.js",
     "github:*": "jspm_packages/github/*.js",
-    "aurelia-loader-systemjs/*": "dist/*.js",
+    "aurelia-loader-default/*": "dist/*.js",
     "npm:*": "jspm_packages/npm/*.js"
   }
 });

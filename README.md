@@ -1,6 +1,6 @@
-# aurelia-loader-systemjs
+# aurelia-loader-default
 
-This library is part of the [Aurelia](http://www.aurelia.io/) platform and contains an implementation of the loader interface using the system.js loader.
+This library is part of the [Aurelia](http://www.aurelia.io/) platform and contains an implementation of the loader interface which works with system.js and all require-based loader APIs.
 
 > To keep up to date on [Aurelia](http://www.aurelia.io/), please visit and subscribe to [the official blog](http://blog.durandal.io/). If you have questions, we invite you to join us on [our Gitter Channel](https://gitter.im/aurelia/discuss).
 

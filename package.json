@@ -1,7 +1,7 @@
 {
-  "name": "aurelia-loader-systemjs",
+  "name": "aurelia-loader-default",
   "version": "0.3.2",
-  "description": "An implementation of the loader interface using the system.js loader.",
+  "description": "A default implementation of the loader interface compatible with system.js and require-based loaders.",
   "keywords": [
     "aurelia",
     "loader",
@@ -9,14 +9,14 @@
   ],
   "homepage": "http://aurelia.io",
   "bugs": {
-    "url": "https://github.com/aurelia/loader-systemjs/issues"
+    "url": "https://github.com/aurelia/loader-default/issues"
   },
   "license": "MIT",
   "author": "Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)",
   "main": "dist/commonjs/index.js",
   "repository": {
     "type": "git",
-    "url": "http://github.com/aurelia/loader-systemjs"
+    "url": "http://github.com/aurelia/loader-default"
   },
   "jspm": {
     "main": "system/index",
