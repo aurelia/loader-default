@@ -38,10 +38,10 @@ function ensureOriginOnExports(executed, name){
 }
 
 Loader.createDefaultLoader = function(){
-  return new SystemJSLoader();
+  return new DefaultLoader();
 };
 
-export class SystemJSLoader extends Loader {
+export class DefaultLoader extends Loader {
   constructor(){
     this.baseUrl = System.baseUrl;
     this.baseViewUrl = System.baseViewUrl || System.baseUrl;
