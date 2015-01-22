@@ -1,3 +1,19 @@
+## 0.4.0 (2015-01-22)
+
+
+#### Bug Fixes
+
+* **loader:**
+  * correct name of exported DefaultLoader class ([eb179a30](http://github.com/aurelia/loader-default/commit/eb179a3035acee421d5287b021a66c38ebfe2375))
+  * update to work with new origin implementation ([a9072680](http://github.com/aurelia/loader-default/commit/a9072680a7ec4e98e9245cf5a8816cba18b96ae9))
+* **package:** update dependencies ([0255ec9a](http://github.com/aurelia/loader-default/commit/0255ec9a0220ea0324b806293f2897843298f71b))
+
+
+#### Features
+
+* **all:** remove system hack; polyfill system for require api; tag through import calls ([7d89aceb](http://github.com/aurelia/loader-default/commit/7d89aceb4775022a6822cb4916d148fda143609a))
+
+
 ### 0.3.2 (2015-01-12)
 
 
