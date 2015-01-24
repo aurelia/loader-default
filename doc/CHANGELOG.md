@@ -1,3 +1,11 @@
+### 0.4.1 (2015-01-24)
+
+
+#### Bug Fixes
+
+* **package:** update reps and fix bower semver ranges ([5c5b5016](http://github.com/aurelia/loader-default/commit/5c5b501676550e0f38dec195af6348bece39e0d1))
+
+
 ## 0.4.0 (2015-01-22)
 
 
