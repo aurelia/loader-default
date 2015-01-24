@@ -25,7 +25,7 @@
       "lib": "dist"
     },
     "dependencies": {
-      "aurelia-loader": "^0.3.2",
+      "aurelia-loader": "^0.3.3",
       "aurelia-metadata": "^0.3.0",
       "aurelia-path": "^0.4.1"
     }
