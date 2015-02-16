@@ -8,6 +8,7 @@ This library is part of the [Aurelia](http://www.aurelia.io/) platform and conta
 
 * [aurelia-metadata](https://github.com/aurelia/metadata)
 * [aurelia-loader](https://github.com/aurelia/loader)
+* [aurelia-path](https://github.com/aurelia/path)
 
 ## Used By
 
