@@ -1,8 +1,22 @@
 import {DefaultLoader} from '../src/index';
 
 describe('the system.js loader', () => {
-  it('should have some tests', () => {
-    var loader = new DefaultLoader();
-    expect(loader).not.toBe(null);
+  it('should create DefaultLoader when createDefaultLoader is called', () => {
+    expect(DefaultLoader.createDefaultLoader()).toEqual(jasmine.any(DefaultLoader));
+  });
+
+  describe('instance method', () => {
+    var loader, baseUrl, baseViewUrl;
+    beforeEach(() => {
+      loader = DefaultLoader.createDefaultLoader();
+      baseUrl = System.baseUrl;
+      baseViewUrl = System.baseViewUrl;
+    });
+
+    afterEach(() => {
+      System.baseUrl = baseUrl;
+      System.baseViewUrl = baseViewUrl;
+    });
+
   });
 });
