@@ -1,3 +1,3 @@
 export default function sayHi(){
-  return "baseModule hello";
+  return "rebasedModule hello";
 }
