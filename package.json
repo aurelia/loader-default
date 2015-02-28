@@ -19,15 +19,15 @@
     "url": "http://github.com/aurelia/loader-default"
   },
   "jspm": {
-    "main": "system/index",
+    "main": "index",
     "format": "register",
     "directories": {
-      "lib": "dist"
+      "lib": "dist/system"
     },
     "dependencies": {
-      "aurelia-loader": "github:aurelia/loader@^0.3.4",
-      "aurelia-metadata": "github:aurelia/metadata@^0.3.2",
-      "aurelia-path": "github:aurelia/path@^0.4.4"
+      "aurelia-loader": "github:aurelia/loader@^0.3.5",
+      "aurelia-metadata": "github:aurelia/metadata@^0.3.3",
+      "aurelia-path": "github:aurelia/path@^0.4.5"
     }
   },
   "devDependencies": {
