@@ -51,7 +51,7 @@ export class DefaultLoader extends Loader {
   loadModule(id, baseUrl){
     baseUrl = baseUrl === undefined ? this.baseUrl : baseUrl;
 
-    if(baseUrl && !id.startsWith(baseUrl)){
+    if(baseUrl && id.indexOf(baseUrl) !== 0){
       id = join(baseUrl, id);
     }
     
@@ -68,18 +68,18 @@ export class DefaultLoader extends Loader {
     });
   }
 
-  loadAllModules(ids){ 
-    var loads = [], i, ii, loader = this.loader;
+  loadAllModules(ids){
+    var loads = [];
 
-    for(i = 0, ii = ids.length; i < ii; ++i){
-      loads.push(this.loadModule(ids[i]));
+    for(let id of ids){
+      loads.push(this.loadModule(id));
     }
 
     return Promise.all(loads);
   }
 
   loadTemplate(url){
-    if(this.baseViewUrl && !url.startsWith(this.baseViewUrl)){
+    if(this.baseViewUrl && url.indexOf(this.baseViewUrl) !== 0){
       url = join(this.baseViewUrl, url);
     }
 

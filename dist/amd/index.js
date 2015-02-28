@@ -1,30 +1,15 @@
 define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], function (exports, _aureliaMetadata, _aureliaLoader, _aureliaPath) {
   "use strict";
 
-  var _prototypeProperties = function (child, staticProps, instanceProps) {
-    if (staticProps) Object.defineProperties(child, staticProps);
-    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-  };
+  var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
-  var _inherits = function (subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) subClass.__proto__ = superClass;
-  };
+  var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
   var Origin = _aureliaMetadata.Origin;
   var Loader = _aureliaLoader.Loader;
   var join = _aureliaPath.join;
-
 
   if (!window.System || !window.System["import"]) {
     var sys = window.System = window.System || {};
@@ -66,8 +51,10 @@ define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], functi
     return new DefaultLoader();
   };
 
-  var DefaultLoader = (function (Loader) {
+  var DefaultLoader = exports.DefaultLoader = (function (Loader) {
     function DefaultLoader() {
+      _classCallCheck(this, DefaultLoader);
+
       this.baseUrl = System.baseUrl;
       this.baseViewUrl = System.baseViewUrl || System.baseUrl;
       this.registry = {};
@@ -79,9 +66,10 @@ define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], functi
       loadModule: {
         value: function loadModule(id, baseUrl) {
           var _this = this;
+
           baseUrl = baseUrl === undefined ? this.baseUrl : baseUrl;
 
-          if (baseUrl && !id.startsWith(baseUrl)) {
+          if (baseUrl && id.indexOf(baseUrl) !== 0) {
             id = join(baseUrl, id);
           }
 
@@ -98,36 +86,51 @@ define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], functi
           });
         },
         writable: true,
-        enumerable: true,
         configurable: true
       },
       loadAllModules: {
         value: function loadAllModules(ids) {
-          var loads = [],
-              i,
-              ii,
-              loader = this.loader;
+          var loads = [];
 
-          for (i = 0, ii = ids.length; i < ii; ++i) {
-            loads.push(this.loadModule(ids[i]));
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = ids[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var id = _step.value;
+
+              loads.push(this.loadModule(id));
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator["return"]) {
+                _iterator["return"]();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
           }
 
           return Promise.all(loads);
         },
         writable: true,
-        enumerable: true,
         configurable: true
       },
       loadTemplate: {
         value: function loadTemplate(url) {
-          if (this.baseViewUrl && !url.startsWith(this.baseViewUrl)) {
+          if (this.baseViewUrl && url.indexOf(this.baseViewUrl) !== 0) {
             url = join(this.baseViewUrl, url);
           }
 
           return this.importTemplate(url);
         },
         writable: true,
-        enumerable: true,
         configurable: true
       }
     });
@@ -135,5 +138,7 @@ define(["exports", "aurelia-metadata", "aurelia-loader", "aurelia-path"], functi
     return DefaultLoader;
   })(Loader);
 
-  exports.DefaultLoader = DefaultLoader;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 });
