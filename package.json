@@ -25,9 +25,9 @@
       "lib": "dist"
     },
     "dependencies": {
-      "aurelia-loader": "^0.3.3",
-      "aurelia-metadata": "^0.3.0",
-      "aurelia-path": "^0.4.1"
+      "aurelia-loader": "github:aurelia/loader@^0.3.4",
+      "aurelia-metadata": "github:aurelia/metadata@^0.3.2",
+      "aurelia-path": "github:aurelia/path@^0.4.4"
     }
   },
   "devDependencies": {
