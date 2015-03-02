@@ -1,16 +1,18 @@
 import {Origin} from 'aurelia-metadata';
 import {Loader} from 'aurelia-loader';
-import {join} from 'aurelia-path';
 
 if(!window.System || !window.System.import){
   var sys = window.System = window.System || {};
+
   sys.polyfilled = true;
   sys.map = {};
+
   sys['import'] = function(moduleId){
     return new Promise((resolve, reject) => {
       require([moduleId], resolve, reject);
     });
   };
+
   sys.normalize = function(url){
     return Promise.resolve(url);
   };
@@ -25,7 +27,7 @@ function ensureOriginOnExports(executed, name){
   }
 
   Origin.set(target, new Origin(name, 'default'));
-  
+
   for (key in target) {
     exportedValue = target[key];
 
@@ -37,32 +39,63 @@ function ensureOriginOnExports(executed, name){
   return executed;
 }
 
-Loader.createDefaultLoader = function(){
-  return new DefaultLoader();
-};
-
 export class DefaultLoader extends Loader {
   constructor(){
-    this.baseUrl = System.baseUrl;
-    this.baseViewUrl = System.baseViewUrl || System.baseUrl;
-    this.registry = {};
+    super();
+
+    this.moduleRegistry = {};
+    var that = this;
+
+    if(System.polyfilled){
+      define('html-import-template', [], {
+        load: function (name, req, onload, config) {
+          var entry = that.getOrCreateTemplateRegistryEntry(name),
+              address;
+
+          if(entry.templateIsLoaded){
+            onload(entry);
+            return;
+          }
+
+          address = req.toUrl(name);
+
+          that.importTemplate(address).then(template => {
+            entry.setTemplate(template);
+            onload(entry);
+          });
+        }
+      });
+    }else{
+      System.set('html-import-template', System.newModule({
+        fetch: function(load, fetch) {
+          var id = load.name.substring(0, load.name.indexOf('!'));
+          var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
+
+          if(entry.templateIsLoaded){
+            return '';
+          }
+
+          return that.importTemplate(load.address).then(template => {
+            entry.setTemplate(template);
+            return '';
+          });
+        },
+        instantiate:function(load) {
+          return load.metadata.templateRegistryEntry;
+        }
+      }));
+    }
   }
 
-  loadModule(id, baseUrl){
-    baseUrl = baseUrl === undefined ? this.baseUrl : baseUrl;
-
-    if(baseUrl && id.indexOf(baseUrl) !== 0){
-      id = join(baseUrl, id);
-    }
-    
+  loadModule(id){
     return System.normalize(id).then(newId => {
-      var existing = this.registry[newId];
+      var existing = this.moduleRegistry[newId];
       if(existing){
         return existing;
       }
 
       return System.import(newId).then(m => {
-        this.registry[newId] = m;
+        this.moduleRegistry[newId] = m;
         return ensureOriginOnExports(m, newId);
       });
     });
@@ -79,10 +112,12 @@ export class DefaultLoader extends Loader {
   }
 
   loadTemplate(url){
-    if(this.baseViewUrl && url.indexOf(this.baseViewUrl) !== 0){
-      url = join(this.baseViewUrl, url);
+    if(System.polyfilled){
+      return System.import('html-import-template!' + url);
+    }else{
+      return System.import(url + '!html-import-template');
     }
-
-    return this.importTemplate(url);
   }
 }
+
+window.AureliaLoader = DefaultLoader;
