@@ -47,7 +47,7 @@ export class DefaultLoader extends Loader {
     var that = this;
 
     if(System.polyfilled){
-      define('html-import-template', [], {
+      define('view', [], {
         load: function (name, req, onload, config) {
           var entry = that.getOrCreateTemplateRegistryEntry(name),
               address;
@@ -66,7 +66,7 @@ export class DefaultLoader extends Loader {
         }
       });
     }else{
-      System.set('html-import-template', System.newModule({
+      System.set('view', System.newModule({
         fetch: function(load, fetch) {
           var id = load.name.substring(0, load.name.indexOf('!'));
           var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
@@ -113,9 +113,9 @@ export class DefaultLoader extends Loader {
 
   loadTemplate(url){
     if(System.polyfilled){
-      return System.import('html-import-template!' + url);
+      return System.import('view!' + url);
     }else{
-      return System.import(url + '!html-import-template');
+      return System.import(url + '!view');
     }
   }
 }
