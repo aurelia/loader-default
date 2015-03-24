@@ -48,7 +48,7 @@ export class DefaultLoader extends Loader {
 
     if(System.polyfilled){
       define('view', [], {
-        load: function (name, req, onload, config) {
+        'load': function (name, req, onload, config) {
           var entry = that.getOrCreateTemplateRegistryEntry(name),
               address;
 
@@ -67,7 +67,7 @@ export class DefaultLoader extends Loader {
       });
     }else{
       System.set('view', System.newModule({
-        fetch: function(load, fetch) {
+        'fetch': function(load, fetch) {
           var id = load.name.substring(0, load.name.indexOf('!'));
           var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
 
@@ -80,7 +80,7 @@ export class DefaultLoader extends Loader {
             return '';
           });
         },
-        instantiate:function(load) {
+        'instantiate':function(load) {
           return load.metadata.templateRegistryEntry;
         }
       }));
