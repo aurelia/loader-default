@@ -1,3 +1,18 @@
+## 0.5.0 (2015-03-24)
+
+
+#### Bug Fixes
+
+* **loader:**
+  * plugin api fetch causes problems with safari ([7788af12](http://github.com/aurelia/loader-default/commit/7788af127ce0dd3f34efcf671b9b43fd0c95a8fb))
+  * change plugin name to view ([4c592bec](http://github.com/aurelia/loader-default/commit/4c592becc0977de24175c5d63a668d7835bd9877))
+
+
+#### Features
+
+* **all:** new loader-plugin-based remplate loader ([ab694b12](http://github.com/aurelia/loader-default/commit/ab694b12f53c06402b0f64d4b60ecacef6490e18))
+
+
 ### 0.4.3 (2015-02-28)
 
 
