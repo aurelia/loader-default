@@ -9,19 +9,16 @@ System.config({
 
 System.config({
   "map": {
-    "aurelia-loader": "github:aurelia/loader@0.4.0",
-    "aurelia-metadata": "github:aurelia/metadata@0.3.4",
-    "github:aurelia/loader@0.4.0": {
-      "aurelia-html-template-element": "github:aurelia/html-template-element@0.1.3",
-      "aurelia-path": "github:aurelia/path@0.4.6",
-      "core-js": "npm:core-js@0.4.10",
+    "aurelia-loader": "github:aurelia/loader@0.5.0",
+    "aurelia-metadata": "github:aurelia/metadata@0.4.0",
+    "github:aurelia/loader@0.5.0": {
+      "aurelia-html-template-element": "github:aurelia/html-template-element@0.2.0",
+      "aurelia-path": "github:aurelia/path@0.5.0",
+      "core-js": "github:zloirock/core-js@0.8.1",
       "webcomponentsjs": "github:webcomponents/webcomponentsjs@0.5.5"
     },
-    "github:jspm/nodelibs-process@0.1.1": {
-      "process": "npm:process@0.10.1"
-    },
-    "npm:core-js@0.4.10": {
-      "process": "github:jspm/nodelibs-process@0.1.1"
+    "github:aurelia/metadata@0.4.0": {
+      "core-js": "github:zloirock/core-js@0.8.1"
     }
   }
 });

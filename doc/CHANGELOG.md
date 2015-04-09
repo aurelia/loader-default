@@ -1,3 +1,11 @@
+## 0.6.0 (2015-04-09)
+
+
+#### Bug Fixes
+
+* **all:** update compiler ([11498313](http://github.com/aurelia/loader-default/commit/11498313b369c5752f69190ddecfccaaae7ea32b))
+
+
 ## 0.5.0 (2015-03-24)
 
 

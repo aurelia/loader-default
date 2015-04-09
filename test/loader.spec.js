@@ -76,8 +76,7 @@ describe('the system.js loader', () => {
       it('will load a template', (done) => {
         loader.loadTemplate('baseTemplate.html')
         .then((result) => {
-          console.log(result);
-            expect(result.template.innerHTML).toBe("<h1>I am the base template</h1>")
+            expect(result.template.innerHTML).toBe("<h1>I am the base template</h1>");
           })
         .catch((reason) => expect(false).toBeTruthy(reason))
         .then(done);
