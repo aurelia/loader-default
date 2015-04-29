@@ -104,8 +104,8 @@ export class DefaultLoader extends Loader {
   loadAllModules(ids){
     var loads = [];
 
-    for(let id of ids){
-      loads.push(this.loadModule(id));
+    for(var i = 0, ii = ids.length; i < ii; ++i){
+      loads.push(this.loadModule(ids[i]));
     }
 
     return Promise.all(loads);
