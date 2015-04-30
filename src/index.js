@@ -1,10 +1,12 @@
 import {Origin} from 'aurelia-metadata';
 import {Loader} from 'aurelia-loader';
 
+var polyfilled = false;
+
 if(!window.System || !window.System.import){
   var sys = window.System = window.System || {};
 
-  sys.polyfilled = true;
+  sys.polyfilled = polyfilled = true;
   sys.map = {};
 
   sys['import'] = function(moduleId){
@@ -46,7 +48,7 @@ export class DefaultLoader extends Loader {
     this.moduleRegistry = {};
     var that = this;
 
-    if(System.polyfilled){
+    if(polyfilled){
       define('view', [], {
         'load': function (name, req, onload, config) {
           var entry = that.getOrCreateTemplateRegistryEntry(name),
@@ -112,11 +114,11 @@ export class DefaultLoader extends Loader {
   }
 
   loadTemplate(url){
-    if(System.polyfilled){
-      return System.import('view!' + url);
-    }else{
-      return System.import(url + '!view');
-    }
+    return polyfilled ? System.import('view!' + url) : System.import(url + '!view');
+  }
+
+  loadText(url){
+    return polyfilled ? System.import('text!' + url) : System.import(url + '!text');
   }
 }
 
