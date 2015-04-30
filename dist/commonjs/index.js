@@ -2,24 +2,20 @@
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
 var _inherits = function (subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+exports.__esModule = true;
 
 var _Origin = require('aurelia-metadata');
 
 var _Loader2 = require('aurelia-loader');
 
+var polyfilled = false;
+
 if (!window.System || !window.System['import']) {
   var sys = window.System = window.System || {};
 
-  sys.polyfilled = true;
+  sys.polyfilled = polyfilled = true;
   sys.map = {};
 
   sys['import'] = function (moduleId) {
@@ -59,12 +55,12 @@ var DefaultLoader = (function (_Loader) {
   function DefaultLoader() {
     _classCallCheck(this, DefaultLoader);
 
-    _get(Object.getPrototypeOf(DefaultLoader.prototype), 'constructor', this).call(this);
+    _Loader.call(this);
 
     this.moduleRegistry = {};
     var that = this;
 
-    if (System.polyfilled) {
+    if (polyfilled) {
       define('view', [], {
         load: function load(name, req, onload, config) {
           var entry = that.getOrCreateTemplateRegistryEntry(name),
@@ -117,65 +113,39 @@ var DefaultLoader = (function (_Loader) {
 
   _inherits(DefaultLoader, _Loader);
 
-  _createClass(DefaultLoader, [{
-    key: 'loadModule',
-    value: function loadModule(id) {
-      var _this = this;
+  DefaultLoader.prototype.loadModule = function loadModule(id) {
+    var _this = this;
 
-      return System.normalize(id).then(function (newId) {
-        var existing = _this.moduleRegistry[newId];
-        if (existing) {
-          return existing;
-        }
+    return System.normalize(id).then(function (newId) {
+      var existing = _this.moduleRegistry[newId];
+      if (existing) {
+        return existing;
+      }
 
-        return System['import'](newId).then(function (m) {
-          _this.moduleRegistry[newId] = m;
-          return ensureOriginOnExports(m, newId);
-        });
+      return System['import'](newId).then(function (m) {
+        _this.moduleRegistry[newId] = m;
+        return ensureOriginOnExports(m, newId);
       });
+    });
+  };
+
+  DefaultLoader.prototype.loadAllModules = function loadAllModules(ids) {
+    var loads = [];
+
+    for (var i = 0, ii = ids.length; i < ii; ++i) {
+      loads.push(this.loadModule(ids[i]));
     }
-  }, {
-    key: 'loadAllModules',
-    value: function loadAllModules(ids) {
-      var loads = [];
 
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+    return Promise.all(loads);
+  };
 
-      try {
-        for (var _iterator = ids[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var id = _step.value;
+  DefaultLoader.prototype.loadTemplate = function loadTemplate(url) {
+    return polyfilled ? System['import']('view!' + url) : System['import'](url + '!view');
+  };
 
-          loads.push(this.loadModule(id));
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator['return']) {
-            _iterator['return']();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      return Promise.all(loads);
-    }
-  }, {
-    key: 'loadTemplate',
-    value: function loadTemplate(url) {
-      if (System.polyfilled) {
-        return System['import']('view!' + url);
-      } else {
-        return System['import'](url + '!view');
-      }
-    }
-  }]);
+  DefaultLoader.prototype.loadText = function loadText(url) {
+    return polyfilled ? System['import']('text!' + url) : System['import'](url + '!text');
+  };
 
   return DefaultLoader;
 })(_Loader2.Loader);

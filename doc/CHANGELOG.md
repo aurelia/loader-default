@@ -1,3 +1,16 @@
+## 0.7.0 (2015-04-30)
+
+
+#### Bug Fixes
+
+* **index:** remove for..of to improve perf ([b8cce178](http://github.com/aurelia/loader-default/commit/b8cce178a3d745acb1dd66f43507478e49c0ff90))
+
+
+#### Features
+
+* **all:** implement the new loadText api for the default loader ([e316be6d](http://github.com/aurelia/loader-default/commit/e316be6d1b1eca2d8fe4984280e15a165c2885fe), closes [#4](http://github.com/aurelia/loader-default/issues/4))
+
+
 ## 0.6.0 (2015-04-09)
 
 
