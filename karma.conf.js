@@ -41,6 +41,7 @@ module.exports = function(config) {
         sourceMap: 'inline',
         modules: 'system',
         moduleIds: false,
+        loose: "all",
         optional: [
           "es7.decorators"
         ]
