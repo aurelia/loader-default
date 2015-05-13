@@ -59,11 +59,17 @@ export class DefaultLoader extends Loader {
             return;
           }
 
-          address = req.toUrl(name);
+          that.findBundledTemplate(name, entry).then(found => {
+            if(found){
+              onload(entry);
+            }else{
+              address = req.toUrl(name);
 
-          that.importTemplate(address).then(template => {
-            entry.setTemplate(template);
-            onload(entry);
+              that.importTemplate(address).then(template => {
+                entry.setTemplate(template);
+                onload(entry);
+              });
+            }
           });
         }
       });
@@ -77,9 +83,15 @@ export class DefaultLoader extends Loader {
             return '';
           }
 
-          return that.importTemplate(load.address).then(template => {
-            entry.setTemplate(template);
-            return '';
+          return that.findBundledTemplate(load.name, entry).then(found => {
+            if(found){
+              return '';
+            }
+
+            return that.importTemplate(load.address).then(template => {
+              entry.setTemplate(template);
+              return '';
+            });
           });
         },
         'instantiate':function(load) {
