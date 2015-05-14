@@ -18,6 +18,25 @@ if(!window.System || !window.System.import){
   sys.normalize = function(url){
     return Promise.resolve(url);
   };
+
+  if(window.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+    var defined = requirejs.s.contexts._.defined;
+    sys.forEachModule = function(callback){
+      for(var key in defined){
+        callback(key, defined[key]);
+      }
+    };
+  }else{
+    sys.forEachModule = function(callback){};
+  }
+}else{
+  var modules = System._loader.modules;
+
+  System.forEachModule = function(callback){
+    for (var key in modules) {
+      callback(key, modules[key].module);
+    }
+  };
 }
 
 function ensureOriginOnExports(executed, name){
