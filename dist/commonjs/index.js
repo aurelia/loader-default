@@ -1,14 +1,14 @@
 'use strict';
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
-var _inherits = function (subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
-
 exports.__esModule = true;
 
-var _Origin = require('aurelia-metadata');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _Loader2 = require('aurelia-loader');
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _aureliaMetadata = require('aurelia-metadata');
+
+var _aureliaLoader = require('aurelia-loader');
 
 var polyfilled = false;
 
@@ -27,6 +27,25 @@ if (!window.System || !window.System['import']) {
   sys.normalize = function (url) {
     return Promise.resolve(url);
   };
+
+  if (window.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+    var defined = requirejs.s.contexts._.defined;
+    sys.forEachModule = function (callback) {
+      for (var key in defined) {
+        callback(key, defined[key]);
+      }
+    };
+  } else {
+    sys.forEachModule = function (callback) {};
+  }
+} else {
+  var modules = System._loader.modules;
+
+  System.forEachModule = function (callback) {
+    for (var key in modules) {
+      callback(key, modules[key].module);
+    }
+  };
 }
 
 function ensureOriginOnExports(executed, name) {
@@ -38,13 +57,13 @@ function ensureOriginOnExports(executed, name) {
     target = target['default'];
   }
 
-  _Origin.Origin.set(target, new _Origin.Origin(name, 'default'));
+  _aureliaMetadata.Origin.set(target, new _aureliaMetadata.Origin(name, 'default'));
 
   for (key in target) {
     exportedValue = target[key];
 
     if (typeof exportedValue === 'function') {
-      _Origin.Origin.set(exportedValue, new _Origin.Origin(name, key));
+      _aureliaMetadata.Origin.set(exportedValue, new _aureliaMetadata.Origin(name, key));
     }
   }
 
@@ -62,7 +81,7 @@ var DefaultLoader = (function (_Loader) {
 
     if (polyfilled) {
       define('view', [], {
-        load: function load(name, req, onload, config) {
+        'load': function load(name, req, onload, config) {
           var entry = that.getOrCreateTemplateRegistryEntry(name),
               address;
 
@@ -71,27 +90,23 @@ var DefaultLoader = (function (_Loader) {
             return;
           }
 
-          address = req.toUrl(name);
+          that.findBundledTemplate(name, entry).then(function (found) {
+            if (found) {
+              onload(entry);
+            } else {
+              address = req.toUrl(name);
 
-          that.importTemplate(address).then(function (template) {
-            entry.setTemplate(template);
-            onload(entry);
+              that.importTemplate(address).then(function (template) {
+                entry.setTemplate(template);
+                onload(entry);
+              });
+            }
           });
         }
       });
     } else {
       System.set('view', System.newModule({
-        fetch: (function (_fetch) {
-          function fetch(_x, _x2) {
-            return _fetch.apply(this, arguments);
-          }
-
-          fetch.toString = function () {
-            return _fetch.toString();
-          };
-
-          return fetch;
-        })(function (load, fetch) {
+        'fetch': function fetch(load, _fetch) {
           var id = load.name.substring(0, load.name.indexOf('!'));
           var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
 
@@ -99,12 +114,18 @@ var DefaultLoader = (function (_Loader) {
             return '';
           }
 
-          return that.importTemplate(load.address).then(function (template) {
-            entry.setTemplate(template);
-            return '';
+          return that.findBundledTemplate(load.name, entry).then(function (found) {
+            if (found) {
+              return '';
+            }
+
+            return that.importTemplate(load.address).then(function (template) {
+              entry.setTemplate(template);
+              return '';
+            });
           });
-        }),
-        instantiate: function instantiate(load) {
+        },
+        'instantiate': function instantiate(load) {
           return load.metadata.templateRegistryEntry;
         }
       }));
@@ -148,7 +169,7 @@ var DefaultLoader = (function (_Loader) {
   };
 
   return DefaultLoader;
-})(_Loader2.Loader);
+})(_aureliaLoader.Loader);
 
 exports.DefaultLoader = DefaultLoader;
 

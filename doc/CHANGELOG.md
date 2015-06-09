@@ -1,3 +1,12 @@
+## 0.8.0 (2015-06-08)
+
+
+#### Features
+
+* **all:** add support for view bundles ([05d333a9](http://github.com/aurelia/loader-default/commit/05d333a94fc6eb9cb6a07da9bdc15a60f961a6d5))
+* **loader:** add System.forEachModule registry iteration ([a5f983b4](http://github.com/aurelia/loader-default/commit/a5f983b4da03ba1a1c149c03297ad562f28d3569))
+
+
 ## 0.7.0 (2015-04-30)
 
 

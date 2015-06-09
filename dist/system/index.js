@@ -1,5 +1,11 @@
 System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
-  var Origin, Loader, _classCallCheck, _inherits, polyfilled, sys, DefaultLoader;
+  'use strict';
+
+  var Origin, Loader, polyfilled, sys, defined, modules, DefaultLoader;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
   function ensureOriginOnExports(executed, name) {
     var target = executed,
@@ -30,12 +36,6 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
       Loader = _aureliaLoader.Loader;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
-      _inherits = function (subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
-
       polyfilled = false;
 
       if (!window.System || !window.System['import']) {
@@ -53,6 +53,26 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
         sys.normalize = function (url) {
           return Promise.resolve(url);
         };
+
+        if (window.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+          defined = requirejs.s.contexts._.defined;
+
+          sys.forEachModule = function (callback) {
+            for (var key in defined) {
+              callback(key, defined[key]);
+            }
+          };
+        } else {
+          sys.forEachModule = function (callback) {};
+        }
+      } else {
+        modules = System._loader.modules;
+
+        System.forEachModule = function (callback) {
+          for (var key in modules) {
+            callback(key, modules[key].module);
+          }
+        };
       }
       DefaultLoader = (function (_Loader) {
         function DefaultLoader() {
@@ -65,7 +85,7 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
 
           if (polyfilled) {
             define('view', [], {
-              load: function load(name, req, onload, config) {
+              'load': function load(name, req, onload, config) {
                 var entry = that.getOrCreateTemplateRegistryEntry(name),
                     address;
 
@@ -74,27 +94,23 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
                   return;
                 }
 
-                address = req.toUrl(name);
+                that.findBundledTemplate(name, entry).then(function (found) {
+                  if (found) {
+                    onload(entry);
+                  } else {
+                    address = req.toUrl(name);
 
-                that.importTemplate(address).then(function (template) {
-                  entry.setTemplate(template);
-                  onload(entry);
+                    that.importTemplate(address).then(function (template) {
+                      entry.setTemplate(template);
+                      onload(entry);
+                    });
+                  }
                 });
               }
             });
           } else {
             System.set('view', System.newModule({
-              fetch: (function (_fetch) {
-                function fetch(_x, _x2) {
-                  return _fetch.apply(this, arguments);
-                }
-
-                fetch.toString = function () {
-                  return _fetch.toString();
-                };
-
-                return fetch;
-              })(function (load, fetch) {
+              'fetch': function fetch(load, _fetch) {
                 var id = load.name.substring(0, load.name.indexOf('!'));
                 var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
 
@@ -102,12 +118,18 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
                   return '';
                 }
 
-                return that.importTemplate(load.address).then(function (template) {
-                  entry.setTemplate(template);
-                  return '';
+                return that.findBundledTemplate(load.name, entry).then(function (found) {
+                  if (found) {
+                    return '';
+                  }
+
+                  return that.importTemplate(load.address).then(function (template) {
+                    entry.setTemplate(template);
+                    return '';
+                  });
                 });
-              }),
-              instantiate: function instantiate(load) {
+              },
+              'instantiate': function instantiate(load) {
                 return load.metadata.templateRegistryEntry;
               }
             }));

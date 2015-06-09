@@ -18,6 +18,25 @@ if(!window.System || !window.System.import){
   sys.normalize = function(url){
     return Promise.resolve(url);
   };
+
+  if(window.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+    var defined = requirejs.s.contexts._.defined;
+    sys.forEachModule = function(callback){
+      for(var key in defined){
+        callback(key, defined[key]);
+      }
+    };
+  }else{
+    sys.forEachModule = function(callback){};
+  }
+}else{
+  var modules = System._loader.modules;
+
+  System.forEachModule = function(callback){
+    for (var key in modules) {
+      callback(key, modules[key].module);
+    }
+  };
 }
 
 function ensureOriginOnExports(executed, name){
@@ -59,11 +78,17 @@ export class DefaultLoader extends Loader {
             return;
           }
 
-          address = req.toUrl(name);
+          that.findBundledTemplate(name, entry).then(found => {
+            if(found){
+              onload(entry);
+            }else{
+              address = req.toUrl(name);
 
-          that.importTemplate(address).then(template => {
-            entry.setTemplate(template);
-            onload(entry);
+              that.importTemplate(address).then(template => {
+                entry.setTemplate(template);
+                onload(entry);
+              });
+            }
           });
         }
       });
@@ -77,9 +102,15 @@ export class DefaultLoader extends Loader {
             return '';
           }
 
-          return that.importTemplate(load.address).then(template => {
-            entry.setTemplate(template);
-            return '';
+          return that.findBundledTemplate(load.name, entry).then(found => {
+            if(found){
+              return '';
+            }
+
+            return that.importTemplate(load.address).then(template => {
+              entry.setTemplate(template);
+              return '';
+            });
           });
         },
         'instantiate':function(load) {
