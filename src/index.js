@@ -24,7 +24,7 @@ if(!window.System || !window.System.import){
     var defined = requirejs.s.contexts._.defined;
     sys.forEachModule = function(callback){
       for(var key in defined){
-        callback(key, defined[key]);
+        if(callback(key, defined[key])) return;
       }
     };
   }else{
@@ -36,7 +36,7 @@ if(!window.System || !window.System.import){
   System.isFake = false;
   System.forEachModule = function(callback){
     for (var key in modules) {
-      callback(key, modules[key].module);
+      if(callback(key, modules[key].module)) return;
     }
   };
 }
