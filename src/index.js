@@ -1,12 +1,13 @@
 import {Origin} from 'aurelia-metadata';
 import {Loader} from 'aurelia-loader';
 
-var polyfilled = false;
+let polyfilled = false;
 
 if(!window.System || !window.System.import){
   var sys = window.System = window.System || {};
 
   sys.polyfilled = polyfilled = true;
+  sys.isFake = false;
   sys.map = {};
 
   sys['import'] = function(moduleId){
@@ -32,6 +33,7 @@ if(!window.System || !window.System.import){
 }else{
   var modules = System._loader.modules;
 
+  System.isFake = false;
   System.forEachModule = function(callback){
     for (var key in modules) {
       callback(key, modules[key].module);
