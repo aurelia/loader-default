@@ -1,3 +1,12 @@
+## 0.9.0 (2015-07-02)
+
+
+#### Bug Fixes
+
+* **all:** differentiate between real, polyfill and fake system ([09767418](http://github.com/aurelia/loader-default/commit/09767418d730aac3e772c0de954b18159673ee68))
+* **origin:** short-circuit module registry search on origin location success ([26a2906c](http://github.com/aurelia/loader-default/commit/26a2906c18a5163c877bb129eef448fa98430394))
+
+
 ## 0.8.0 (2015-06-08)
 
 

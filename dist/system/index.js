@@ -42,6 +42,7 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
         sys = window.System = window.System || {};
 
         sys.polyfilled = polyfilled = true;
+        sys.isFake = false;
         sys.map = {};
 
         sys['import'] = function (moduleId) {
@@ -59,7 +60,7 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
 
           sys.forEachModule = function (callback) {
             for (var key in defined) {
-              callback(key, defined[key]);
+              if (callback(key, defined[key])) return;
             }
           };
         } else {
@@ -68,9 +69,10 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
       } else {
         modules = System._loader.modules;
 
+        System.isFake = false;
         System.forEachModule = function (callback) {
           for (var key in modules) {
-            callback(key, modules[key].module);
+            if (callback(key, modules[key].module)) return;
           }
         };
       }

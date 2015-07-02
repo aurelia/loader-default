@@ -13,6 +13,7 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
     var sys = window.System = window.System || {};
 
     sys.polyfilled = polyfilled = true;
+    sys.isFake = false;
     sys.map = {};
 
     sys['import'] = function (moduleId) {
@@ -29,7 +30,7 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
       var defined = requirejs.s.contexts._.defined;
       sys.forEachModule = function (callback) {
         for (var key in defined) {
-          callback(key, defined[key]);
+          if (callback(key, defined[key])) return;
         }
       };
     } else {
@@ -38,9 +39,10 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
   } else {
     var modules = System._loader.modules;
 
+    System.isFake = false;
     System.forEachModule = function (callback) {
       for (var key in modules) {
-        callback(key, modules[key].module);
+        if (callback(key, modules[key].module)) return;
       }
     };
   }
