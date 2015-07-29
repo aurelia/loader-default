@@ -1,6 +1,6 @@
 {
   "name": "aurelia-loader-default",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "A default implementation of the loader interface compatible with system.js and require-based loaders.",
   "keywords": [
     "aurelia",
