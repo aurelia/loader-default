@@ -17,7 +17,7 @@
     "url": "http://github.com/aurelia/loader-default"
   },
   "dependencies": {
-    "aurelia-loader": "^0.8.0",
-    "aurelia-metadata": "^0.7.0"
+    "aurelia-loader": "^0.8.3",
+    "aurelia-metadata": "^0.7.1"
   }
 }
