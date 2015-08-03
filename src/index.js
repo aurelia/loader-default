@@ -2,6 +2,7 @@ import {Origin} from 'aurelia-metadata';
 import {Loader} from 'aurelia-loader';
 
 let polyfilled = false;
+let url = null;
 
 if(!window.System || !window.System.import){
   var sys = window.System = window.System || {};
@@ -32,7 +33,7 @@ if(!window.System || !window.System.import){
   }
 }else{
   var modules = System._loader.modules;
-
+  url = typeof URL != 'undefined' ? URL : URLPolyfill;
   System.isFake = false;
   System.forEachModule = function(callback){
     for (var key in modules) {
@@ -60,6 +61,75 @@ function ensureOriginOnExports(executed, name){
   }
 
   return executed;
+}
+
+function getCanonicalName(loader, normalized) {
+  // remove the plugin part first
+  var pluginIndex = normalized.indexOf('!');
+  var plugin;
+  if (pluginIndex != -1) {
+    plugin = normalized.substr(pluginIndex + 1);
+    normalized = normalized.substr(0, pluginIndex);
+  }
+
+  // defaultJSExtensions handling
+  if (loader.defaultJSExtensions && normalized.split('/').pop().split('.').pop() == 'js') {
+    // if we're in a package that disables defaultJSExtensions, leave as-is
+    var isDefaultExtensionPackage = false;
+    for (var p in loader.packages) {
+      if (normalized.substr(0, p.length) == p && (normalized.length == p.length || normalized[p.length] == '/')) {
+        if ('defaultExtension' in loader.packages[p])
+          isDefaultExtensionPackage = true;
+      }
+    }
+
+    // remove defaultJSExtension
+    if (!isDefaultExtensionPackage)
+      normalized = normalized.substr(0, normalized.length - 3);
+  }
+
+  // now just reverse apply paths rules to get canonical name
+  var pathMatch, pathMatchLength = 0;
+  var curMatchlength;
+  for (var p in loader.paths) {
+    // normalize the output path
+    var curPath = new url(loader.paths[p], loader.baseURL).href;
+
+    // do reverse match
+    var wIndex = curPath.indexOf('*');
+    if (wIndex === -1) {
+      if (normalized === curPath) {
+        curMatchLength = curPath.split('/').length;
+        if (curMatchLength > pathMatchLength) {
+          pathMatch = p;
+          pathMatchLength = curMatchLength;
+        }
+      }
+    }
+    else {
+      if (normalized.substr(0, wIndex) === curPath.substr(0, wIndex)
+        && normalized.substr(normalized.length - curPath.length + wIndex + 1) === curPath.substr(wIndex + 1)) {
+        curMatchLength = curPath.split('/').length;
+        if (curMatchLength > pathMatchLength) {
+          pathMatch = p.replace('*', normalized.substr(wIndex, normalized.length - curPath.length + 1));
+          pathMatchLength = curMatchLength;
+        }
+      }
+    }
+  }
+
+  // when no path was matched, act like the standard rule is *: baseURL/*
+  if (!pathMatch) {
+    if (normalized.substr(0, loader.baseURL.length) == loader.baseURL)
+      pathMatch = normalized.substr(loader.baseURL.length);
+    else
+      pathMatch = normalized;
+  }
+
+  if (plugin)
+    pathMatch += '!' + getCanonicalName(loader, plugin);
+
+  return pathMatch;
 }
 
 export class DefaultLoader extends Loader {
@@ -96,16 +166,17 @@ export class DefaultLoader extends Loader {
       });
     }else{
       System.set('view', System.newModule({
-        'fetch': function(load, fetch) {
-          var id = load.name.substring(0, load.name.indexOf('!'));
-          var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
+        'fetch': function(load, _fetch) {
+          let name = System.normalizeSync ? getCanonicalName(this, load.name) : load.name;
+          let id = name.substring(0, name.indexOf('!'));
+          let entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
 
-          if(entry.templateIsLoaded){
+          if(entry.templateIsLoaded) {
             return '';
           }
 
-          return that.findBundledTemplate(load.name, entry).then(found => {
-            if(found){
+          return that.findBundledTemplate(name, entry).then(found => {
+            if(found) {
               return '';
             }
 
@@ -115,7 +186,7 @@ export class DefaultLoader extends Loader {
             });
           });
         },
-        'instantiate':function(load) {
+        'instantiate': function(load) {
           return load.metadata.templateRegistryEntry;
         }
       }));
