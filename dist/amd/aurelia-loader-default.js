@@ -8,6 +8,7 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
   function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
   var polyfilled = false;
+  var url = null;
 
   if (!window.System || !window.System['import']) {
     var sys = window.System = window.System || {};
@@ -38,7 +39,7 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
     }
   } else {
     var modules = System._loader.modules;
-
+    url = typeof URL != 'undefined' ? URL : URLPolyfill;
     System.isFake = false;
     System.forEachModule = function (callback) {
       for (var key in modules) {
@@ -67,6 +68,60 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
     }
 
     return executed;
+  }
+
+  function getCanonicalName(loader, normalized) {
+    var pluginIndex = normalized.indexOf('!');
+    var plugin;
+    if (pluginIndex != -1) {
+      plugin = normalized.substr(pluginIndex + 1);
+      normalized = normalized.substr(0, pluginIndex);
+    }
+
+    if (loader.defaultJSExtensions && normalized.split('/').pop().split('.').pop() == 'js') {
+      var isDefaultExtensionPackage = false;
+      for (var p in loader.packages) {
+        if (normalized.substr(0, p.length) == p && (normalized.length == p.length || normalized[p.length] == '/')) {
+          if ('defaultExtension' in loader.packages[p]) isDefaultExtensionPackage = true;
+        }
+      }
+
+      if (!isDefaultExtensionPackage) normalized = normalized.substr(0, normalized.length - 3);
+    }
+
+    var pathMatch,
+        pathMatchLength = 0;
+    var curMatchlength;
+    for (var p in loader.paths) {
+      var curPath = new url(loader.paths[p], loader.baseURL).href;
+
+      var wIndex = curPath.indexOf('*');
+      if (wIndex === -1) {
+        if (normalized === curPath) {
+          curMatchLength = curPath.split('/').length;
+          if (curMatchLength > pathMatchLength) {
+            pathMatch = p;
+            pathMatchLength = curMatchLength;
+          }
+        }
+      } else {
+        if (normalized.substr(0, wIndex) === curPath.substr(0, wIndex) && normalized.substr(normalized.length - curPath.length + wIndex + 1) === curPath.substr(wIndex + 1)) {
+          curMatchLength = curPath.split('/').length;
+          if (curMatchLength > pathMatchLength) {
+            pathMatch = p.replace('*', normalized.substr(wIndex, normalized.length - curPath.length + 1));
+            pathMatchLength = curMatchLength;
+          }
+        }
+      }
+    }
+
+    if (!pathMatch) {
+      if (normalized.substr(0, loader.baseURL.length) == loader.baseURL) pathMatch = normalized.substr(loader.baseURL.length);else pathMatch = normalized;
+    }
+
+    if (plugin) pathMatch += '!' + getCanonicalName(loader, plugin);
+
+    return pathMatch;
   }
 
   var DefaultLoader = (function (_Loader) {
@@ -106,14 +161,15 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
       } else {
         System.set('view', System.newModule({
           'fetch': function fetch(load, _fetch) {
-            var id = load.name.substring(0, load.name.indexOf('!'));
+            var name = System.normalizeSync ? getCanonicalName(this, load.name) : load.name;
+            var id = name.substring(0, name.indexOf('!'));
             var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
 
             if (entry.templateIsLoaded) {
               return '';
             }
 
-            return that.findBundledTemplate(load.name, entry).then(function (found) {
+            return that.findBundledTemplate(name, entry).then(function (found) {
               if (found) {
                 return '';
               }

@@ -1,3 +1,11 @@
+### 0.9.2 (2015-08-05)
+
+
+#### Bug Fixes
+
+* **index:** prepare loader for jspm beta ([62b18e68](http://github.com/aurelia/loader-default/commit/62b18e68c1ccfb19e4e9b862efda679ed7295ae2))
+
+
 ### 0.9.1 (2015-07-29)
 
 * improve output file name
