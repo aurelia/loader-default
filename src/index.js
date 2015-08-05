@@ -32,8 +32,12 @@ if(!window.System || !window.System.import){
     sys.forEachModule = function(callback){};
   }
 }else{
-  var modules = System._loader.modules;
-  url = typeof URL != 'undefined' ? URL : URLPolyfill;
+  var modules = System._loader.modules, hasURL = false;
+  try {
+    hasURL = typeof URLPolyfill != 'undefined' || new URL('test:///').protocol == 'test:';
+  }
+  catch(e) {}
+  url = hasURL ? URL : URLPolyfill;
   System.isFake = false;
   System.forEachModule = function(callback){
     for (var key in modules) {
