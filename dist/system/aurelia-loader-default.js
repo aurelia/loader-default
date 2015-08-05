@@ -1,7 +1,7 @@
 System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
   'use strict';
 
-  var Origin, Loader, polyfilled, url, sys, defined, modules, DefaultLoader;
+  var Origin, Loader, polyfilled, url, sys, defined, modules, hasURL, DefaultLoader;
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -50,7 +50,7 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
 
     var pathMatch,
         pathMatchLength = 0;
-    var curMatchlength;
+    var curMatchLength;
     for (var p in loader.paths) {
       var curPath = new url(loader.paths[p], loader.baseURL).href;
 
@@ -123,8 +123,14 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
         }
       } else {
         modules = System._loader.modules;
+        hasURL = false;
 
-        url = typeof URL != 'undefined' ? URL : URLPolyfill;
+        try {
+          hasURL = typeof URLPolyfill != 'undefined' || new URL('test:///').protocol == 'test:';
+        } catch (e) {}
+
+        url = hasURL ? URL : URLPolyfill;
+
         System.isFake = false;
         System.forEachModule = function (callback) {
           for (var key in modules) {
@@ -169,7 +175,7 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
           } else {
             System.set('view', System.newModule({
               'fetch': function fetch(load, _fetch) {
-                var name = System.normalizeSync ? getCanonicalName(this, load.name) : load.name;
+                var name = getCanonicalName(this, load.name);
                 var id = name.substring(0, name.indexOf('!'));
                 var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
 

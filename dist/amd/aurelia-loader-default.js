@@ -38,8 +38,15 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
       sys.forEachModule = function (callback) {};
     }
   } else {
-    var modules = System._loader.modules;
-    url = typeof URL != 'undefined' ? URL : URLPolyfill;
+    var modules = System._loader.modules,
+        hasURL = false;
+
+    try {
+      hasURL = typeof URLPolyfill != 'undefined' || new URL('test:///').protocol == 'test:';
+    } catch (e) {}
+
+    url = hasURL ? URL : URLPolyfill;
+
     System.isFake = false;
     System.forEachModule = function (callback) {
       for (var key in modules) {
@@ -91,7 +98,7 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
 
     var pathMatch,
         pathMatchLength = 0;
-    var curMatchlength;
+    var curMatchLength;
     for (var p in loader.paths) {
       var curPath = new url(loader.paths[p], loader.baseURL).href;
 
@@ -161,7 +168,7 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
       } else {
         System.set('view', System.newModule({
           'fetch': function fetch(load, _fetch) {
-            var name = System.normalizeSync ? getCanonicalName(this, load.name) : load.name;
+            var name = getCanonicalName(this, load.name);
             var id = name.substring(0, name.indexOf('!'));
             var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
 

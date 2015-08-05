@@ -1,3 +1,11 @@
+### 0.9.3 (2015-08-05)
+
+
+#### Bug Fixes
+
+* **index:** various url canonicalization bugs ([b373ef6d](http://github.com/aurelia/loader-default/commit/b373ef6d8e17d2ea4a25b6dbe17f5d0d61ead9ab))
+
+
 ### 0.9.2 (2015-08-05)
 
 
