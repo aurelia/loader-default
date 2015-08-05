@@ -32,8 +32,15 @@ if(!window.System || !window.System.import){
     sys.forEachModule = function(callback){};
   }
 }else{
-  var modules = System._loader.modules;
-  url = typeof URL != 'undefined' ? URL : URLPolyfill;
+  var modules = System._loader.modules, hasURL = false;
+
+  try {
+    hasURL = typeof URLPolyfill != 'undefined' || new URL('test:///').protocol == 'test:';
+  }
+  catch(e) {}
+
+  url = hasURL ? URL : URLPolyfill;
+
   System.isFake = false;
   System.forEachModule = function(callback){
     for (var key in modules) {
@@ -90,7 +97,7 @@ function getCanonicalName(loader, normalized) {
 
   // now just reverse apply paths rules to get canonical name
   var pathMatch, pathMatchLength = 0;
-  var curMatchlength;
+  var curMatchLength;
   for (var p in loader.paths) {
     // normalize the output path
     var curPath = new url(loader.paths[p], loader.baseURL).href;
@@ -167,7 +174,7 @@ export class DefaultLoader extends Loader {
     }else{
       System.set('view', System.newModule({
         'fetch': function(load, _fetch) {
-          let name = System.normalizeSync ? getCanonicalName(this, load.name) : load.name;
+          let name = getCanonicalName(this, load.name);
           let id = name.substring(0, name.indexOf('!'));
           let entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
 
