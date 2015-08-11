@@ -1,3 +1,11 @@
+### 0.9.4 (2015-08-11)
+
+
+#### Bug Fixes
+
+* **url:** Internet Explorer ([5b1496cb](http://github.com/aurelia/loader-default/commit/5b1496cbe6d7409ff4f9360f65b165456cabd5db))
+
+
 ### 0.9.3 (2015-08-05)
 
 

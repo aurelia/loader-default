@@ -126,7 +126,7 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
         hasURL = false;
 
         try {
-          hasURL = typeof URLPolyfill != 'undefined' || new URL('test:///').protocol == 'test:';
+          hasURL = new URL('test:///').protocol == 'test:';
         } catch (e) {}
 
         url = hasURL ? URL : URLPolyfill;

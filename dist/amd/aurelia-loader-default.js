@@ -42,7 +42,7 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
         hasURL = false;
 
     try {
-      hasURL = typeof URLPolyfill != 'undefined' || new URL('test:///').protocol == 'test:';
+      hasURL = new URL('test:///').protocol == 'test:';
     } catch (e) {}
 
     url = hasURL ? URL : URLPolyfill;
