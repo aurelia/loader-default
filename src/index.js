@@ -35,7 +35,7 @@ if(!window.System || !window.System.import){
   var modules = System._loader.modules, hasURL = false;
 
   try {
-    hasURL = typeof URLPolyfill != 'undefined' || new URL('test:///').protocol == 'test:';
+    hasURL = new URL('test:///').protocol == 'test:';
   }
   catch(e) {}
 
