@@ -200,7 +200,7 @@ export class DefaultLoader extends Loader {
     }
   }
 
-  loadModule(id: string): Proimise<any> {
+  loadModule(id: string): Promise<any> {
     return System.normalize(id).then(newId => {
       var existing = this.moduleRegistry[newId];
       if(existing){
@@ -214,7 +214,7 @@ export class DefaultLoader extends Loader {
     });
   }
 
-  loadAllModules(ids: string[]): Promse<any[]> {
+  loadAllModules(ids: string[]): Promise<any[]> {
     var loads = [];
 
     for(var i = 0, ii = ids.length; i < ii; ++i){
