@@ -1,3 +1,11 @@
+### 0.9.5 (2015-08-14)
+
+
+#### Features
+
+* **all:** add more type info ([f12bbca5](http://github.com/aurelia/loader-default/commit/f12bbca550fd78275fe448274f44946aad98f04c))
+
+
 ### 0.9.4 (2015-08-11)
 
 

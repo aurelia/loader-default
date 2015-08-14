@@ -5,7 +5,7 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
   function ensureOriginOnExports(executed, name) {
     var target = executed,
@@ -21,7 +21,7 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
     for (key in target) {
       exportedValue = target[key];
 
-      if (typeof exportedValue === 'function') {
+      if (typeof exportedValue === "function") {
         Origin.set(exportedValue, new Origin(name, key));
       }
     }
@@ -139,6 +139,8 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
         };
       }
       DefaultLoader = (function (_Loader) {
+        _inherits(DefaultLoader, _Loader);
+
         function DefaultLoader() {
           _classCallCheck(this, DefaultLoader);
 
@@ -200,8 +202,6 @@ System.register(['aurelia-metadata', 'aurelia-loader'], function (_export) {
             }));
           }
         }
-
-        _inherits(DefaultLoader, _Loader);
 
         DefaultLoader.prototype.loadModule = function loadModule(id) {
           var _this = this;
