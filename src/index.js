@@ -200,7 +200,7 @@ export class DefaultLoader extends Loader {
     }
   }
 
-  loadModule(id){
+  loadModule(id: string): Proimise<any> {
     return System.normalize(id).then(newId => {
       var existing = this.moduleRegistry[newId];
       if(existing){
@@ -214,7 +214,7 @@ export class DefaultLoader extends Loader {
     });
   }
 
-  loadAllModules(ids){
+  loadAllModules(ids: string[]): Promse<any[]> {
     var loads = [];
 
     for(var i = 0, ii = ids.length; i < ii; ++i){
@@ -224,11 +224,11 @@ export class DefaultLoader extends Loader {
     return Promise.all(loads);
   }
 
-  loadTemplate(url){
+  loadTemplate(url: string): Promise<TemplateRegistryEntry> {
     return polyfilled ? System.import('view!' + url) : System.import(url + '!view');
   }
 
-  loadText(url){
+  loadText(url: string): Promise<string> {
     return polyfilled ? System.import('text!' + url) : System.import(url + '!text');
   }
 }
