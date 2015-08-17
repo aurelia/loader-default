@@ -1,5 +1,5 @@
 import {Origin} from 'aurelia-metadata';
-import {Loader} from 'aurelia-loader';
+import {Loader, TemplateRegistryEntry } from 'aurelia-loader';
 
 let polyfilled = false;
 let url = null;
