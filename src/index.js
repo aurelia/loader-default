@@ -23,6 +23,10 @@ if(!window.System || !window.System.import){
     return Promise.resolve(url);
   };
 
+  sys.normalizeSync = function(url){
+    return url;
+  };
+
   if(window.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
     var defined = requirejs.s.contexts._.defined;
     sys.forEachModule = function(callback){
@@ -72,77 +76,8 @@ function ensureOriginOnExports(executed, name){
   return executed;
 }
 
-function getCanonicalName(loader, normalized) {
-  // remove the plugin part first
-  var pluginIndex = normalized.indexOf('!');
-  var plugin;
-  if (pluginIndex != -1) {
-    plugin = normalized.substr(pluginIndex + 1);
-    normalized = normalized.substr(0, pluginIndex);
-  }
-
-  // defaultJSExtensions handling
-  if (loader.defaultJSExtensions && normalized.split('/').pop().split('.').pop() == 'js') {
-    // if we're in a package that disables defaultJSExtensions, leave as-is
-    var isDefaultExtensionPackage = false;
-    for (var p in loader.packages) {
-      if (normalized.substr(0, p.length) == p && (normalized.length == p.length || normalized[p.length] == '/')) {
-        if ('defaultExtension' in loader.packages[p])
-          isDefaultExtensionPackage = true;
-      }
-    }
-
-    // remove defaultJSExtension
-    if (!isDefaultExtensionPackage)
-      normalized = normalized.substr(0, normalized.length - 3);
-  }
-
-  // now just reverse apply paths rules to get canonical name
-  var pathMatch, pathMatchLength = 0;
-  var curMatchLength;
-  for (var p in loader.paths) {
-    // normalize the output path
-    var curPath = new url(loader.paths[p], loader.baseURL).href;
-
-    // do reverse match
-    var wIndex = curPath.indexOf('*');
-    if (wIndex === -1) {
-      if (normalized === curPath) {
-        curMatchLength = curPath.split('/').length;
-        if (curMatchLength > pathMatchLength) {
-          pathMatch = p;
-          pathMatchLength = curMatchLength;
-        }
-      }
-    }
-    else {
-      if (normalized.substr(0, wIndex) === curPath.substr(0, wIndex)
-        && normalized.substr(normalized.length - curPath.length + wIndex + 1) === curPath.substr(wIndex + 1)) {
-        curMatchLength = curPath.split('/').length;
-        if (curMatchLength > pathMatchLength) {
-          pathMatch = p.replace('*', normalized.substr(wIndex, normalized.length - curPath.length + 1));
-          pathMatchLength = curMatchLength;
-        }
-      }
-    }
-  }
-
-  // when no path was matched, act like the standard rule is *: baseURL/*
-  if (!pathMatch) {
-    if (normalized.substr(0, loader.baseURL.length) == loader.baseURL)
-      pathMatch = normalized.substr(loader.baseURL.length);
-    else
-      pathMatch = normalized;
-  }
-
-  if (plugin)
-    pathMatch += '!' + getCanonicalName(loader, plugin);
-
-  return pathMatch;
-}
-
 interface TemplateLoader {
-  loadTemplate(address: string, canonicalName: string, entry: TemplateRegistryEntry): Promise<TemplateRegistryEntry>;
+  loadTemplate(loader: Loader, entry: TemplateRegistryEntry): Promise<any>;
 }
 
 export class DefaultLoader extends Loader {
@@ -155,9 +90,9 @@ export class DefaultLoader extends Loader {
     let that = this;
 
     this.addPlugin('template-registry-entry', {
-      'fetch':function(address, canonicalName, id) {
-        let entry = that.getOrCreateTemplateRegistryEntry(id);
-        return entry.templateIsLoaded ? entry : that.templateLoader.loadTemplate(address, canonicalName, entry);
+      'fetch':function(address) {
+        let entry = that.getOrCreateTemplateRegistryEntry(address);
+        return entry.templateIsLoaded ? entry : that.templateLoader.loadTemplate(that, entry).then(x => entry);
       }
     });
   }
@@ -168,11 +103,11 @@ export class DefaultLoader extends Loader {
 
   useTextLoader(): void {
     console.warn('The useTextLoader() API will be removed once this option becomes the default.');
-    this.useTemplateLoader(new TextTemplateLoader(this));
+    this.useTemplateLoader(new TextTemplateLoader());
   }
 
   useHTMLImportsLoader(): void {
-    this.useTemplateLoader(new HTMLImportTemplateLoader(this));
+    this.useTemplateLoader(new HTMLImportTemplateLoader());
   }
 
   loadModule(id: string): Promise<any> {
@@ -216,16 +151,14 @@ export class DefaultLoader extends Loader {
       define(pluginName, [], {
         'load': function (name, req, onload) {
           let address = req.toUrl(name);
-          let result = implementation.fetch(address, name, name);
+          let result = implementation.fetch(address);
           Promise.resolve(result).then(onload);
         }
       });
     }else{
       System.set(pluginName, System.newModule({
         'fetch': function(load, _fetch) {
-          let canonicalName = getCanonicalName(this, load.name);
-          let id = canonicalName.substring(0, canonicalName.indexOf('!'));
-          let result = implementation.fetch(load.address, canonicalName, id);
+          let result = implementation.fetch(load.address);
           return Promise.resolve(result).then(x => {
             load.metadata.result = x;
             return '';

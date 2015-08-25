@@ -1,74 +1,69 @@
-import {TemplateRegistryEntry} from 'aurelia-loader';
+import {TemplateRegistryEntry, Loader} from 'aurelia-loader';
 
 export class HTMLImportTemplateLoader {
-  constructor(loader){
-    this.loader = loader;
+  constructor(){
     this.hasTemplateElement = ('content' in document.createElement('template'));
     this.needsBundleCheck = true;
+    this.onBundleReady = null;
   }
 
-  loadTemplate(address: string, canonicalName: string, entry: TemplateRegistryEntry): Promise<TemplateRegistryEntry> {
-    return this._tryFindTemplateInBundle(address, canonicalName, entry).then(found => {
-      if(found){
-        return entry;
-      }
-
-      return this._importDocument(address).then(doc => {
-        let template = this._findTemplate(doc, address);
-        entry.setTemplate(template);
-        return entry;
-      });
+  loadTemplate(loader: Loader, entry: TemplateRegistryEntry): Promise<any> {
+    return this._tryFindTemplateInBundle(entry).then(found => {
+      return found ? entry : this._importDocument(entry).then(doc => this._findTemplate(doc, entry));
     });
   }
 
-  _tryFindTemplateInBundle(address: string, canonicalName: string, entry: TemplateRegistryEntry): Promise<boolean>{
+  _tryFindTemplateInBundle(entry: TemplateRegistryEntry): Promise<boolean>{
     if(this.bundle){
-      return this._tryGetTemplateFromBundle(canonicalName, entry);
+      return this._tryGetTemplateFromBundle(entry);
     } else if(this.onBundleReady){
-      return this.onBundleReady.then(() => this._tryGetTemplateFromBundle(canonicalName, entry));
+      return this.onBundleReady.then(() => this._tryGetTemplateFromBundle(entry));
     } else if(this.needsBundleCheck){
       if(!('import' in document.createElement('link'))){
         return System.normalize('aurelia-loader-default').then(name => {
           return System.import('webcomponentsjs/HTMLImports.min', name).then(() => {
-            return this._loadBundle();
+            return this._loadBundle(entry);
           });
         });
       }else{
-        return this._loadBundle();
+        return this._loadBundle(entry);
       }
     }
 
     return Promise.resolve(false);
   }
 
-  _loadBundle(){
+  _loadBundle(entry){
     var bundleLink = document.querySelector('link[aurelia-view-bundle]');
     this.needsBundleCheck = false;
 
     if(bundleLink){
       this.onBundleReady = this._importBundle(bundleLink).then(doc => {
+        this._normalizeTemplateIds(doc);
         this.bundle = doc;
         this.onBundleReady = null;
       });
 
-      return this.onBundleReady.then(() => this._tryGetTemplateFromBundle(canonicalName, entry));
+      return this.onBundleReady.then(() => this._tryGetTemplateFromBundle(entry));
     }
+
+    return Promise.resolve(false);
   }
 
-  _importDocument(url) {
+  _importDocument(entry) {
     return new Promise((resolve, reject) => {
       var frag = document.createDocumentFragment();
       var link = document.createElement('link');
 
       link.rel = 'import';
-      link.href = url;
+      link.href = entry.address;
       frag.appendChild(link);
 
       this._importElements(frag, link, () => resolve(link.import));
     });
   }
 
-  _findTemplate(doc, url) {
+  _findTemplate(doc, entry) {
     if(!this.hasTemplateElement){
       HTMLTemplateElement.bootstrap(doc);
     }
@@ -76,14 +71,14 @@ export class HTMLImportTemplateLoader {
     var template = doc.getElementsByTagName('template')[0];
 
     if(!template){
-      throw new Error(`There was no template element found in '${url}'.`);
+      throw new Error(`There was no template element found in '${entry.address}'.`);
     }
 
-    return template;
+    entry.setTemplate(template);
   }
 
-  _tryGetTemplateFromBundle(name, entry){
-    var found = this.bundle.getElementById(name);
+  _tryGetTemplateFromBundle(entry){
+    var found = this.bundle.getElementById(entry.address);
 
     if(found){
       entry.setTemplate(found);
@@ -111,6 +106,15 @@ export class HTMLImportTemplateLoader {
         });
       }
     });
+  }
+
+  _normalizeTemplateIds(doc){
+    var templates = doc.getElementsByTagName('template');
+
+    for(let i = 0, ii = templates.length; i < ii; ++i){
+      let current = templates[i];
+      current.setAttribute('id', System.normalizeSync(current.getAttribute('id')));
+    }
   }
 
   _importElements(frag, link, callback) {
