@@ -1,5 +1,7 @@
 import {Origin} from 'aurelia-metadata';
 import {Loader} from 'aurelia-loader';
+import {HTMLImportTemplateLoader} from './html-import-template-loader';
+import {TextTemplateLoader} from './text-template-loader';
 
 let polyfilled = false;
 let url = null;
@@ -139,65 +141,38 @@ function getCanonicalName(loader, normalized) {
   return pathMatch;
 }
 
+interface TemplateLoader {
+  loadTemplate(address: string, canonicalName: string, entry: TemplateRegistryEntry): Promise<TemplateRegistryEntry>;
+}
+
 export class DefaultLoader extends Loader {
   constructor(){
     super();
 
     this.moduleRegistry = {};
-    var that = this;
+    this.useHTMLImportsLoader();
 
-    if(polyfilled){
-      define('view', [], {
-        'load': function (name, req, onload, config) {
-          var entry = that.getOrCreateTemplateRegistryEntry(name),
-              address;
+    let that = this;
 
-          if(entry.templateIsLoaded){
-            onload(entry);
-            return;
-          }
+    this.addPlugin('template-registry-entry', {
+      'fetch':function(address, canonicalName, id) {
+        let entry = that.getOrCreateTemplateRegistryEntry(id);
+        return entry.templateIsLoaded ? entry : that.templateLoader.loadTemplate(address, canonicalName, entry);
+      }
+    });
+  }
 
-          that.findBundledTemplate(name, entry).then(found => {
-            if(found){
-              onload(entry);
-            }else{
-              address = req.toUrl(name);
+  useTemplateLoader(templateLoader: TemplateLoader): void {
+    this.templateLoader = templateLoader;
+  }
 
-              that.importTemplate(address).then(template => {
-                entry.setTemplate(template);
-                onload(entry);
-              });
-            }
-          });
-        }
-      });
-    }else{
-      System.set('view', System.newModule({
-        'fetch': function(load, _fetch) {
-          let name = getCanonicalName(this, load.name);
-          let id = name.substring(0, name.indexOf('!'));
-          let entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
+  useTextLoader(): void {
+    console.warn('The useTextLoader() API will be removed once this option becomes the default.');
+    this.useTemplateLoader(new TextTemplateLoader(this));
+  }
 
-          if(entry.templateIsLoaded) {
-            return '';
-          }
-
-          return that.findBundledTemplate(name, entry).then(found => {
-            if(found) {
-              return '';
-            }
-
-            return that.importTemplate(load.address).then(template => {
-              entry.setTemplate(template);
-              return '';
-            });
-          });
-        },
-        'instantiate': function(load) {
-          return load.metadata.templateRegistryEntry;
-        }
-      }));
-    }
+  useHTMLImportsLoader(): void {
+    this.useTemplateLoader(new HTMLImportTemplateLoader(this));
   }
 
   loadModule(id: string): Promise<any> {
@@ -225,11 +200,42 @@ export class DefaultLoader extends Loader {
   }
 
   loadTemplate(url: string): Promise<TemplateRegistryEntry> {
-    return polyfilled ? System.import('view!' + url) : System.import(url + '!view');
+    return System.import(this.applyPluginToUrl(url, 'template-registry-entry'));
   }
 
   loadText(url: string): Promise<string> {
-    return polyfilled ? System.import('text!' + url) : System.import(url + '!text');
+    return System.import(this.applyPluginToUrl(url, 'text'));
+  }
+
+  applyPluginToUrl(url: string, pluginName: string): string {
+    return polyfilled ? `${pluginName}!${url}` : `${url}!${pluginName}`;
+  }
+
+  addPlugin(pluginName, implementation){
+    if(polyfilled){
+      define(pluginName, [], {
+        'load': function (name, req, onload) {
+          let address = req.toUrl(name);
+          let result = implementation.fetch(address, name, name);
+          Promise.resolve(result).then(onload);
+        }
+      });
+    }else{
+      System.set(pluginName, System.newModule({
+        'fetch': function(load, _fetch) {
+          let canonicalName = getCanonicalName(this, load.name);
+          let id = canonicalName.substring(0, canonicalName.indexOf('!'));
+          let result = implementation.fetch(load.address, canonicalName, id);
+          return Promise.resolve(result).then(x => {
+            load.metadata.result = x;
+            return '';
+          });
+        },
+        'instantiate': function(load) {
+          return load.metadata.result;
+        }
+      }));
+    }
   }
 }
 
