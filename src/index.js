@@ -4,7 +4,6 @@ import {HTMLImportTemplateLoader} from './html-import-template-loader';
 import {TextTemplateLoader} from './text-template-loader';
 
 let polyfilled = false;
-let url = null;
 
 if(!window.System || !window.System.import){
   var sys = window.System = window.System || {};
@@ -38,15 +37,7 @@ if(!window.System || !window.System.import){
     sys.forEachModule = function(callback){};
   }
 }else{
-  var modules = System._loader.modules, hasURL = false;
-
-  try {
-    hasURL = new URL('test:///').protocol == 'test:';
-  }
-  catch(e) {}
-
-  url = hasURL ? URL : URLPolyfill;
-
+  var modules = System._loader.modules;
   System.isFake = false;
   System.forEachModule = function(callback){
     for (var key in modules) {
