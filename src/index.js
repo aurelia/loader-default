@@ -1,5 +1,5 @@
 import {Origin} from 'aurelia-metadata';
-import {Loader} from 'aurelia-loader';
+import {TemplateRegistryEntry, Loader} from 'aurelia-loader';
 import {HTMLImportTemplateLoader} from './html-import-template-loader';
 import {TextTemplateLoader} from './text-template-loader';
 
