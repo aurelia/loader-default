@@ -1,7 +1,7 @@
 import {TemplateRegistryEntry, Loader} from 'aurelia-loader';
 
 export class TextTemplateLoader {
-  constructor(){
+  constructor() {
     this.hasTemplateElement = ('content' in document.createElement('template'));
   }
 
@@ -17,10 +17,10 @@ export class TextTemplateLoader {
 
     let template = parser.firstElementChild;
 
-    if(!this.hasTemplateElement){
+    if (!this.hasTemplateElement) {
       template.content = document.createDocumentFragment();
 
-      while(template.firstChild){
+      while (template.firstChild) {
         template.content.appendChild(template.firstChild);
       }
 

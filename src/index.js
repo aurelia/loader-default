@@ -1,3 +1,4 @@
+/*eslint dot-notation:0*/
 import {Origin} from 'aurelia-metadata';
 import {TemplateRegistryEntry, Loader} from 'aurelia-loader';
 import {HTMLImportTemplateLoader} from './html-import-template-loader';
@@ -5,52 +6,53 @@ import {TextTemplateLoader} from './text-template-loader';
 
 let polyfilled = false;
 
-if(!window.System || !window.System.import){
-  var sys = window.System = window.System || {};
+if (!window.System || !window.System.import) {
+  let sys = window.System = window.System || {};
 
   sys.polyfilled = polyfilled = true;
   sys.isFake = false;
   sys.map = {};
 
-  sys['import'] = function(moduleId){
+  sys['import'] = function(moduleId) {
     return new Promise((resolve, reject) => {
       require([moduleId], resolve, reject);
     });
   };
 
-  sys.normalize = function(url){
+  sys.normalize = function(url) {
     return Promise.resolve(url);
   };
 
-  sys.normalizeSync = function(url){
+  sys.normalizeSync = function(url) {
     return url;
   };
 
-  if(window.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
-    var defined = requirejs.s.contexts._.defined;
-    sys.forEachModule = function(callback){
-      for(var key in defined){
-        if(callback(key, defined[key])) return;
+  if (window.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+    let defined = requirejs.s.contexts._.defined;
+    sys.forEachModule = function(callback) {
+      for (let key in defined) {
+        if (callback(key, defined[key])) return;
       }
     };
-  }else{
-    sys.forEachModule = function(callback){};
+  } else {
+    sys.forEachModule = function(callback) {};
   }
-}else{
-  var modules = System._loader.modules;
+} else {
+  let modules = System._loader.modules;
   System.isFake = false;
-  System.forEachModule = function(callback){
-    for (var key in modules) {
-      if(callback(key, modules[key].module)) return;
+  System.forEachModule = function(callback) {
+    for (let key in modules) {
+      if (callback(key, modules[key].module)) return;
     }
   };
 }
 
-function ensureOriginOnExports(executed, name){
-  var target = executed,
-      key, exportedValue;
+function ensureOriginOnExports(executed, name) {
+  let target = executed;
+  let key;
+  let exportedValue;
 
-  if(target.__useDefault){
+  if (target.__useDefault) {
     target = target['default'];
   }
 
@@ -59,7 +61,7 @@ function ensureOriginOnExports(executed, name){
   for (key in target) {
     exportedValue = target[key];
 
-    if (typeof exportedValue === "function") {
+    if (typeof exportedValue === 'function') {
       Origin.set(exportedValue, new Origin(name, key));
     }
   }
@@ -72,7 +74,7 @@ interface TemplateLoader {
 }
 
 export class DefaultLoader extends Loader {
-  constructor(){
+  constructor() {
     super();
 
     this.moduleRegistry = {};
@@ -81,7 +83,7 @@ export class DefaultLoader extends Loader {
     let that = this;
 
     this.addPlugin('template-registry-entry', {
-      'fetch':function(address) {
+      'fetch': function(address) {
         let entry = that.getOrCreateTemplateRegistryEntry(address);
         return entry.templateIsLoaded ? entry : that.templateLoader.loadTemplate(that, entry).then(x => entry);
       }
@@ -93,7 +95,6 @@ export class DefaultLoader extends Loader {
   }
 
   useTextLoader(): void {
-    console.warn('The useTextLoader() API will be removed once this option becomes the default.');
     this.useTemplateLoader(new TextTemplateLoader());
   }
 
@@ -103,8 +104,8 @@ export class DefaultLoader extends Loader {
 
   loadModule(id: string): Promise<any> {
     return System.normalize(id).then(newId => {
-      var existing = this.moduleRegistry[newId];
-      if(existing){
+      let existing = this.moduleRegistry[newId];
+      if (existing) {
         return existing;
       }
 
@@ -116,9 +117,9 @@ export class DefaultLoader extends Loader {
   }
 
   loadAllModules(ids: string[]): Promise<any[]> {
-    var loads = [];
+    let loads = [];
 
-    for(var i = 0, ii = ids.length; i < ii; ++i){
+    for (let i = 0, ii = ids.length; i < ii; ++i) {
       loads.push(this.loadModule(ids[i]));
     }
 
@@ -137,16 +138,16 @@ export class DefaultLoader extends Loader {
     return polyfilled ? `${pluginName}!${url}` : `${url}!${pluginName}`;
   }
 
-  addPlugin(pluginName, implementation){
-    if(polyfilled){
+  addPlugin(pluginName, implementation) {
+    if (polyfilled) {
       define(pluginName, [], {
-        'load': function (name, req, onload) {
+        'load': function(name, req, onload) {
           let address = req.toUrl(name);
           let result = implementation.fetch(address);
           Promise.resolve(result).then(onload);
         }
       });
-    }else{
+    } else {
       System.set(pluginName, System.newModule({
         'fetch': function(load, _fetch) {
           let result = implementation.fetch(load.address);

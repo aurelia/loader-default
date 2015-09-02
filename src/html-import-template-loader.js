@@ -1,7 +1,7 @@
 import {TemplateRegistryEntry, Loader} from 'aurelia-loader';
 
 export class HTMLImportTemplateLoader {
-  constructor(){
+  constructor() {
     this.hasTemplateElement = ('content' in document.createElement('template'));
     this.needsBundleCheck = true;
     this.onBundleReady = null;
@@ -13,31 +13,31 @@ export class HTMLImportTemplateLoader {
     });
   }
 
-  _tryFindTemplateInBundle(entry: TemplateRegistryEntry): Promise<boolean>{
-    if(this.bundle){
+  _tryFindTemplateInBundle(entry: TemplateRegistryEntry): Promise<boolean> {
+    if (this.bundle) {
       return this._tryGetTemplateFromBundle(entry);
-    } else if(this.onBundleReady){
+    } else if (this.onBundleReady) {
       return this.onBundleReady.then(() => this._tryGetTemplateFromBundle(entry));
-    } else if(this.needsBundleCheck){
-      if(!('import' in document.createElement('link'))){
+    } else if (this.needsBundleCheck) {
+      if (!('import' in document.createElement('link'))) {
         return System.normalize('aurelia-loader-default').then(name => {
           return System.import('webcomponentsjs/HTMLImports.min', name).then(() => {
             return this._loadBundle(entry);
           });
         });
-      }else{
-        return this._loadBundle(entry);
       }
+
+      return this._loadBundle(entry);
     }
 
     return Promise.resolve(false);
   }
 
-  _loadBundle(entry){
-    var bundleLink = document.querySelector('link[aurelia-view-bundle]');
+  _loadBundle(entry) {
+    let bundleLink = document.querySelector('link[aurelia-view-bundle]');
     this.needsBundleCheck = false;
 
-    if(bundleLink){
+    if (bundleLink) {
       this.onBundleReady = this._importBundle(bundleLink).then(doc => {
         this._normalizeTemplateIds(doc);
         this.bundle = doc;
@@ -52,8 +52,8 @@ export class HTMLImportTemplateLoader {
 
   _importDocument(entry) {
     return new Promise((resolve, reject) => {
-      var frag = document.createDocumentFragment();
-      var link = document.createElement('link');
+      let frag = document.createDocumentFragment();
+      let link = document.createElement('link');
 
       link.rel = 'import';
       link.href = entry.address;
@@ -64,23 +64,23 @@ export class HTMLImportTemplateLoader {
   }
 
   _findTemplate(doc, entry) {
-    if(!this.hasTemplateElement){
+    if (!this.hasTemplateElement) {
       HTMLTemplateElement.bootstrap(doc);
     }
 
-    var template = doc.getElementsByTagName('template')[0];
+    let template = doc.getElementsByTagName('template')[0];
 
-    if(!template){
+    if (!template) {
       throw new Error(`There was no template element found in '${entry.address}'.`);
     }
 
     entry.setTemplate(template);
   }
 
-  _tryGetTemplateFromBundle(entry){
-    var found = this.bundle.getElementById(entry.address);
+  _tryGetTemplateFromBundle(entry) {
+    let found = this.bundle.getElementById(entry.address);
 
-    if(found){
+    if (found) {
       entry.setTemplate(found);
       return Promise.resolve(true);
     }
@@ -90,15 +90,15 @@ export class HTMLImportTemplateLoader {
 
   _importBundle(link) {
     return new Promise((resolve, reject) => {
-      if(link.import){
-        if(!this.hasTemplateElement){
+      if (link.import) {
+        if (!this.hasTemplateElement) {
           HTMLTemplateElement.bootstrap(link.import);
         }
 
         resolve(link.import);
-      }else{
+      } else {
         this._importElements(null, link, () => {
-          if(!this.hasTemplateElement){
+          if (!this.hasTemplateElement) {
             HTMLTemplateElement.bootstrap(link.import);
           }
 
@@ -108,23 +108,23 @@ export class HTMLImportTemplateLoader {
     });
   }
 
-  _normalizeTemplateIds(doc){
-    var templates = doc.getElementsByTagName('template');
+  _normalizeTemplateIds(doc) {
+    let templates = doc.getElementsByTagName('template');
 
-    for(let i = 0, ii = templates.length; i < ii; ++i){
+    for (let i = 0, ii = templates.length; i < ii; ++i) {
       let current = templates[i];
       current.setAttribute('id', System.normalizeSync(current.getAttribute('id')));
     }
   }
 
   _importElements(frag, link, callback) {
-    if(frag){
+    if (frag) {
       document.head.appendChild(frag);
     }
 
-    if(window.Polymer && Polymer.whenReady){
+    if (window.Polymer && Polymer.whenReady ) {
       Polymer.whenReady(callback);
-    }else{
+    } else {
       link.addEventListener('load', callback);
     }
   }
