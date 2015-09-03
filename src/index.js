@@ -77,6 +77,7 @@ export class DefaultLoader extends Loader {
   constructor() {
     super();
 
+    this.textPluginName = 'text';
     this.moduleRegistry = {};
     this.useHTMLImportsLoader();
 
@@ -131,7 +132,7 @@ export class DefaultLoader extends Loader {
   }
 
   loadText(url: string): Promise<string> {
-    return System.import(this.applyPluginToUrl(url, 'text'));
+    return System.import(this.applyPluginToUrl(url, this.textPluginName));
   }
 
   applyPluginToUrl(url: string, pluginName: string): string {
