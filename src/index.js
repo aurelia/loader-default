@@ -1,7 +1,6 @@
 /*eslint dot-notation:0*/
 import {Origin} from 'aurelia-metadata';
 import {TemplateRegistryEntry, Loader} from 'aurelia-loader';
-import {HTMLImportTemplateLoader} from './html-import-template-loader';
 import {TextTemplateLoader} from './text-template-loader';
 
 let polyfilled = false;
@@ -39,12 +38,29 @@ if (!window.System || !window.System.import) {
   }
 } else {
   let modules = System._loader.modules;
+
   System.isFake = false;
+
   System.forEachModule = function(callback) {
     for (let key in modules) {
       if (callback(key, modules[key].module)) return;
     }
   };
+
+  System.set('text', System.newModule({
+    'translate': function(load) {
+      return 'module.exports = "' + load.source
+        .replace(/(["\\])/g, '\\$1')
+        .replace(/[\f]/g, '\\f')
+        .replace(/[\b]/g, '\\b')
+        .replace(/[\n]/g, '\\n')
+        .replace(/[\t]/g, '\\t')
+        .replace(/[\r]/g, '\\r')
+        .replace(/[\u2028]/g, '\\u2028')
+        .replace(/[\u2029]/g, '\\u2029')
+      + '";';
+    }
+  }));
 }
 
 function ensureOriginOnExports(executed, name) {
@@ -74,12 +90,13 @@ interface TemplateLoader {
 }
 
 export class DefaultLoader extends Loader {
+  textPluginName: string = 'text';
+
   constructor() {
     super();
 
-    this.textPluginName = 'text';
     this.moduleRegistry = {};
-    this.useHTMLImportsLoader();
+    this.useTemplateLoader(new TextTemplateLoader());
 
     let that = this;
 
@@ -93,14 +110,6 @@ export class DefaultLoader extends Loader {
 
   useTemplateLoader(templateLoader: TemplateLoader): void {
     this.templateLoader = templateLoader;
-  }
-
-  useTextLoader(): void {
-    this.useTemplateLoader(new TextTemplateLoader());
-  }
-
-  useHTMLImportsLoader(): void {
-    this.useTemplateLoader(new HTMLImportTemplateLoader());
   }
 
   loadModule(id: string): Promise<any> {

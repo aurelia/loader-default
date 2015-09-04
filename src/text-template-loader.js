@@ -17,16 +17,17 @@ export class TextTemplateLoader {
 
     let template = parser.firstElementChild;
 
-    if (!this.hasTemplateElement) {
-      template.content = document.createDocumentFragment();
-
-      while (template.firstChild) {
-        template.content.appendChild(template.firstChild);
-      }
-
-      HTMLTemplateElement.bootstrap(template);
+    if (this.hasTemplateElement) {
+      return template;
     }
 
+    template.content = document.createDocumentFragment();
+
+    while (template.firstChild) {
+      template.content.appendChild(template.firstChild);
+    }
+
+    HTMLTemplateElement.bootstrap(template);
     return template;
   }
 }

@@ -6,7 +6,7 @@
   "flags": {},
   "children": [
     {
-      "id": 22,
+      "id": 15,
       "name": "DefaultLoader",
       "kind": 128,
       "kindString": "Class",
@@ -15,7 +15,7 @@
       },
       "children": [
         {
-          "id": 23,
+          "id": 17,
           "name": "constructor",
           "kind": 512,
           "kindString": "Constructor",
@@ -24,7 +24,7 @@
           },
           "signatures": [
             {
-              "id": 24,
+              "id": 18,
               "name": "new DefaultLoader",
               "kind": 16384,
               "kindString": "Constructor signature",
@@ -32,24 +32,37 @@
               "type": {
                 "type": "reference",
                 "name": "DefaultLoader",
-                "id": 22,
+                "id": 15,
                 "moduleName": "\"aurelia-loader-default\""
               },
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.__constructor",
-                "id": 91
+                "id": 81
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.__constructor",
-            "id": 91
+            "id": 81
           }
         },
         {
-          "id": 48,
+          "id": 16,
+          "name": "textPluginName",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isExported": true
+          },
+          "type": {
+            "type": "instrinct",
+            "name": "string"
+          }
+        },
+        {
+          "id": 38,
           "name": "addPlugin",
           "kind": 2048,
           "kindString": "Method",
@@ -58,14 +71,14 @@
           },
           "signatures": [
             {
-              "id": 49,
+              "id": 39,
               "name": "addPlugin",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "parameters": [
                 {
-                  "id": 50,
+                  "id": 40,
                   "name": "pluginName",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -76,7 +89,7 @@
                   }
                 },
                 {
-                  "id": 51,
+                  "id": 41,
                   "name": "implementation",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -94,18 +107,18 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.addPlugin",
-                "id": 109
+                "id": 99
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.addPlugin",
-            "id": 109
+            "id": 99
           }
         },
         {
-          "id": 44,
+          "id": 34,
           "name": "applyPluginToUrl",
           "kind": 2048,
           "kindString": "Method",
@@ -114,14 +127,14 @@
           },
           "signatures": [
             {
-              "id": 45,
+              "id": 35,
               "name": "applyPluginToUrl",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "parameters": [
                 {
-                  "id": 46,
+                  "id": 36,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -132,7 +145,7 @@
                   }
                 },
                 {
-                  "id": 47,
+                  "id": 37,
                   "name": "pluginName",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -150,18 +163,18 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.applyPluginToUrl",
-                "id": 105
+                "id": 95
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.applyPluginToUrl",
-            "id": 105
+            "id": 95
           }
         },
         {
-          "id": 52,
+          "id": 42,
           "name": "getOrCreateTemplateRegistryEntry",
           "kind": 2048,
           "kindString": "Method",
@@ -170,14 +183,14 @@
           },
           "signatures": [
             {
-              "id": 53,
+              "id": 43,
               "name": "getOrCreateTemplateRegistryEntry",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "parameters": [
                 {
-                  "id": 54,
+                  "id": 44,
                   "name": "id",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -191,24 +204,24 @@
               "type": {
                 "type": "reference",
                 "name": "TemplateRegistryEntry",
-                "id": 69,
+                "id": 59,
                 "moduleName": "\"aurelia-loader\""
               },
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.getOrCreateTemplateRegistryEntry",
-                "id": 113
+                "id": 103
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.getOrCreateTemplateRegistryEntry",
-            "id": 113
+            "id": 103
           }
         },
         {
-          "id": 35,
+          "id": 25,
           "name": "loadAllModules",
           "kind": 2048,
           "kindString": "Method",
@@ -217,14 +230,14 @@
           },
           "signatures": [
             {
-              "id": 36,
+              "id": 26,
               "name": "loadAllModules",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "parameters": [
                 {
-                  "id": 37,
+                  "id": 27,
                   "name": "ids",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -250,18 +263,18 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadAllModules",
-                "id": 96
+                "id": 86
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadAllModules",
-            "id": 96
+            "id": 86
           }
         },
         {
-          "id": 32,
+          "id": 22,
           "name": "loadModule",
           "kind": 2048,
           "kindString": "Method",
@@ -270,14 +283,14 @@
           },
           "signatures": [
             {
-              "id": 33,
+              "id": 23,
               "name": "loadModule",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "parameters": [
                 {
-                  "id": 34,
+                  "id": 24,
                   "name": "id",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -301,18 +314,18 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadModule",
-                "id": 93
+                "id": 83
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadModule",
-            "id": 93
+            "id": 83
           }
         },
         {
-          "id": 38,
+          "id": 28,
           "name": "loadTemplate",
           "kind": 2048,
           "kindString": "Method",
@@ -321,14 +334,14 @@
           },
           "signatures": [
             {
-              "id": 39,
+              "id": 29,
               "name": "loadTemplate",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "parameters": [
                 {
-                  "id": 40,
+                  "id": 30,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -346,25 +359,25 @@
                   {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
-                    "id": 69
+                    "id": 59
                   }
                 ]
               },
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadTemplate",
-                "id": 99
+                "id": 89
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadTemplate",
-            "id": 99
+            "id": 89
           }
         },
         {
-          "id": 41,
+          "id": 31,
           "name": "loadText",
           "kind": 2048,
           "kindString": "Method",
@@ -373,14 +386,14 @@
           },
           "signatures": [
             {
-              "id": 42,
+              "id": 32,
               "name": "loadText",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "parameters": [
                 {
-                  "id": 43,
+                  "id": 33,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -404,40 +417,18 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadText",
-                "id": 102
+                "id": 92
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadText",
-            "id": 102
+            "id": 92
           }
         },
         {
-          "id": 30,
-          "name": "useHTMLImportsLoader",
-          "kind": 2048,
-          "kindString": "Method",
-          "flags": {
-            "isExported": true
-          },
-          "signatures": [
-            {
-              "id": 31,
-              "name": "useHTMLImportsLoader",
-              "kind": 4096,
-              "kindString": "Call signature",
-              "flags": {},
-              "type": {
-                "type": "instrinct",
-                "name": "void"
-              }
-            }
-          ]
-        },
-        {
-          "id": 25,
+          "id": 19,
           "name": "useTemplateLoader",
           "kind": 2048,
           "kindString": "Method",
@@ -446,14 +437,14 @@
           },
           "signatures": [
             {
-              "id": 26,
+              "id": 20,
               "name": "useTemplateLoader",
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
               "parameters": [
                 {
-                  "id": 27,
+                  "id": 21,
                   "name": "templateLoader",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -472,28 +463,6 @@
               }
             }
           ]
-        },
-        {
-          "id": 28,
-          "name": "useTextLoader",
-          "kind": 2048,
-          "kindString": "Method",
-          "flags": {
-            "isExported": true
-          },
-          "signatures": [
-            {
-              "id": 29,
-              "name": "useTextLoader",
-              "kind": 4096,
-              "kindString": "Call signature",
-              "flags": {},
-              "type": {
-                "type": "instrinct",
-                "name": "void"
-              }
-            }
-          ]
         }
       ],
       "groups": [
@@ -501,23 +470,28 @@
           "title": "Constructors",
           "kind": 512,
           "children": [
-            23
+            17
+          ]
+        },
+        {
+          "title": "Properties",
+          "kind": 1024,
+          "children": [
+            16
           ]
         },
         {
           "title": "Methods",
           "kind": 2048,
           "children": [
-            48,
-            44,
-            52,
-            35,
-            32,
             38,
-            41,
-            30,
+            34,
+            42,
             25,
-            28
+            22,
+            28,
+            31,
+            19
           ]
         }
       ],
@@ -525,13 +499,13 @@
         {
           "type": "reference",
           "name": "Loader",
-          "id": 90
+          "id": 80
         }
       ]
     },
     {
       "id": 8,
-      "name": "HTMLImportTemplateLoader",
+      "name": "TextTemplateLoader",
       "kind": 128,
       "kindString": "Class",
       "flags": {
@@ -549,13 +523,13 @@
           "signatures": [
             {
               "id": 10,
-              "name": "new HTMLImportTemplateLoader",
+              "name": "new TextTemplateLoader",
               "kind": 16384,
               "kindString": "Constructor signature",
               "flags": {},
               "type": {
                 "type": "reference",
-                "name": "HTMLImportTemplateLoader",
+                "name": "TextTemplateLoader",
                 "id": 8,
                 "moduleName": "\"aurelia-loader-default\""
               }
@@ -587,7 +561,7 @@
                   "type": {
                     "type": "reference",
                     "name": "Loader",
-                    "id": 90,
+                    "id": 80,
                     "moduleName": "\"aurelia-loader\""
                   }
                 },
@@ -600,7 +574,7 @@
                   "type": {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
-                    "id": 69,
+                    "id": 59,
                     "moduleName": "\"aurelia-loader\""
                   }
                 }
@@ -632,113 +606,6 @@
           "kind": 2048,
           "children": [
             11
-          ]
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "name": "TextTemplateLoader",
-      "kind": 128,
-      "kindString": "Class",
-      "flags": {
-        "isExported": true
-      },
-      "children": [
-        {
-          "id": 16,
-          "name": "constructor",
-          "kind": 512,
-          "kindString": "Constructor",
-          "flags": {
-            "isExported": true
-          },
-          "signatures": [
-            {
-              "id": 17,
-              "name": "new TextTemplateLoader",
-              "kind": 16384,
-              "kindString": "Constructor signature",
-              "flags": {},
-              "type": {
-                "type": "reference",
-                "name": "TextTemplateLoader",
-                "id": 15,
-                "moduleName": "\"aurelia-loader-default\""
-              }
-            }
-          ]
-        },
-        {
-          "id": 18,
-          "name": "loadTemplate",
-          "kind": 2048,
-          "kindString": "Method",
-          "flags": {
-            "isExported": true
-          },
-          "signatures": [
-            {
-              "id": 19,
-              "name": "loadTemplate",
-              "kind": 4096,
-              "kindString": "Call signature",
-              "flags": {},
-              "parameters": [
-                {
-                  "id": 20,
-                  "name": "loader",
-                  "kind": 32768,
-                  "kindString": "Parameter",
-                  "flags": {},
-                  "type": {
-                    "type": "reference",
-                    "name": "Loader",
-                    "id": 90,
-                    "moduleName": "\"aurelia-loader\""
-                  }
-                },
-                {
-                  "id": 21,
-                  "name": "entry",
-                  "kind": 32768,
-                  "kindString": "Parameter",
-                  "flags": {},
-                  "type": {
-                    "type": "reference",
-                    "name": "TemplateRegistryEntry",
-                    "id": 69,
-                    "moduleName": "\"aurelia-loader\""
-                  }
-                }
-              ],
-              "type": {
-                "type": "reference",
-                "name": "Promise",
-                "typeArguments": [
-                  {
-                    "type": "instrinct",
-                    "name": "any"
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ],
-      "groups": [
-        {
-          "title": "Constructors",
-          "kind": 512,
-          "children": [
-            16
-          ]
-        },
-        {
-          "title": "Methods",
-          "kind": 2048,
-          "children": [
-            18
           ]
         }
       ]
@@ -777,7 +644,7 @@
                   "type": {
                     "type": "reference",
                     "name": "Loader",
-                    "id": 90
+                    "id": 80
                   }
                 },
                 {
@@ -789,7 +656,7 @@
                   "type": {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
-                    "id": 69
+                    "id": 59
                   }
                 }
               ],
@@ -823,9 +690,8 @@
       "title": "Classes",
       "kind": 128,
       "children": [
-        22,
-        8,
-        15
+        15,
+        8
       ]
     },
     {

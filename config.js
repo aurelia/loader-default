@@ -19,7 +19,6 @@ System.config({
     "babel": "npm:babel-core@5.1.13",
     "babel-runtime": "npm:babel-runtime@5.1.13",
     "core-js": "npm:core-js@0.9.18",
-    "webcomponentsjs": "github:webcomponents/webcomponentsjs@0.7.12",
     "github:aurelia/loader@0.8.4": {
       "aurelia-html-template-element": "github:aurelia/html-template-element@0.2.0",
       "aurelia-metadata": "github:aurelia/metadata@0.7.3",
