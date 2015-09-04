@@ -1,3 +1,27 @@
+## 0.10.0 (2015-09-04)
+
+
+#### Bug Fixes
+
+* **all:**
+  * remove web components and html imports ([5e40af0f](http://github.com/aurelia/loader-default/commit/5e40af0f22ccf90b7f959fb770cbf2cd5a9f7c8e))
+  * improve the template loader interface and html imports lookup ([dec84529](http://github.com/aurelia/loader-default/commit/dec84529b0dc6174c5daa9609ecaf2304515886f))
+* **build:** update linting, testing and tools ([9b8935a2](http://github.com/aurelia/loader-default/commit/9b8935a297c2b7807acf7be429fe6a528c9ceef8))
+* **index:**
+  * add missing import ([8adcd049](http://github.com/aurelia/loader-default/commit/8adcd049f6d25ffa2823a000a82d380a51e1287a))
+  * remove unnecessary URL polyfill code ([55d70449](http://github.com/aurelia/loader-default/commit/55d704498ca44afd708859500b12049f1c6fd56c))
+  * fix typos in spelling of Promise ([1d0b43f0](http://github.com/aurelia/loader-default/commit/1d0b43f0b7ca2a1b2cd67ced60bc0cb6422ae45d))
+
+
+#### Features
+
+* **all:** introduce template loaders; one for html imports and one for text ([babe9484](http://github.com/aurelia/loader-default/commit/babe94840b2292d21f203e68b64ca556d4f27bf5))
+* **docs:**
+  * generate api.json from .d.ts file ([b33a7888](http://github.com/aurelia/loader-default/commit/b33a78882306817ad01184ccdc69037498f1a58f))
+  * generate api.json from .d.ts file ([3602db67](http://github.com/aurelia/loader-default/commit/3602db67493cd8d39318fa3e36a04b3e3a9246e5))
+* **index:** add textPluginName property to the default loader ([99d74421](http://github.com/aurelia/loader-default/commit/99d74421d1a65a12206558739d4b45b1519b498e))
+
+
 ### 0.9.5 (2015-08-14)
 
 

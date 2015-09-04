@@ -1,14 +1,53 @@
-define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _aureliaMetadata, _aureliaLoader) {
+define(['exports', 'aurelia-loader', 'aurelia-metadata'], function (exports, _aureliaLoader, _aureliaMetadata) {
   'use strict';
 
   exports.__esModule = true;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
   function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+  var TextTemplateLoader = (function () {
+    function TextTemplateLoader() {
+      _classCallCheck(this, TextTemplateLoader);
+
+      this.hasTemplateElement = 'content' in document.createElement('template');
+    }
+
+    TextTemplateLoader.prototype.loadTemplate = function loadTemplate(loader, entry) {
+      var _this = this;
+
+      return loader.loadText(entry.address).then(function (text) {
+        entry.setTemplate(_this._createTemplateFromMarkup(text));
+      });
+    };
+
+    TextTemplateLoader.prototype._createTemplateFromMarkup = function _createTemplateFromMarkup(markup) {
+      var parser = document.createElement('div');
+      parser.innerHTML = markup;
+
+      var template = parser.firstElementChild;
+
+      if (this.hasTemplateElement) {
+        return template;
+      }
+
+      template.content = document.createDocumentFragment();
+
+      while (template.firstChild) {
+        template.content.appendChild(template.firstChild);
+      }
+
+      HTMLTemplateElement.bootstrap(template);
+      return template;
+    };
+
+    return TextTemplateLoader;
+  })();
+
+  exports.TextTemplateLoader = TextTemplateLoader;
+
   var polyfilled = false;
-  var url = null;
 
   if (!window.System || !window.System['import']) {
     var sys = window.System = window.System || {};
@@ -27,38 +66,46 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
       return Promise.resolve(url);
     };
 
+    sys.normalizeSync = function (url) {
+      return url;
+    };
+
     if (window.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
-      var defined = requirejs.s.contexts._.defined;
-      sys.forEachModule = function (callback) {
-        for (var key in defined) {
-          if (callback(key, defined[key])) return;
-        }
-      };
+      (function () {
+        var defined = requirejs.s.contexts._.defined;
+        sys.forEachModule = function (callback) {
+          for (var key in defined) {
+            if (callback(key, defined[key])) return;
+          }
+        };
+      })();
     } else {
       sys.forEachModule = function (callback) {};
     }
   } else {
-    var modules = System._loader.modules,
-        hasURL = false;
+    (function () {
+      var modules = System._loader.modules;
 
-    try {
-      hasURL = new URL('test:///').protocol == 'test:';
-    } catch (e) {}
+      System.isFake = false;
 
-    url = hasURL ? URL : URLPolyfill;
+      System.forEachModule = function (callback) {
+        for (var key in modules) {
+          if (callback(key, modules[key].module)) return;
+        }
+      };
 
-    System.isFake = false;
-    System.forEachModule = function (callback) {
-      for (var key in modules) {
-        if (callback(key, modules[key].module)) return;
-      }
-    };
+      System.set('text', System.newModule({
+        'translate': function translate(load) {
+          return 'module.exports = "' + load.source.replace(/(["\\])/g, '\\$1').replace(/[\f]/g, '\\f').replace(/[\b]/g, '\\b').replace(/[\n]/g, '\\n').replace(/[\t]/g, '\\t').replace(/[\r]/g, '\\r').replace(/[\u2028]/g, '\\u2028').replace(/[\u2029]/g, '\\u2029') + '";';
+        }
+      }));
+    })();
   }
 
   function ensureOriginOnExports(executed, name) {
-    var target = executed,
-        key,
-        exportedValue;
+    var target = executed;
+    var key = undefined;
+    var exportedValue = undefined;
 
     if (target.__useDefault) {
       target = target['default'];
@@ -69,66 +116,12 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
     for (key in target) {
       exportedValue = target[key];
 
-      if (typeof exportedValue === "function") {
+      if (typeof exportedValue === 'function') {
         _aureliaMetadata.Origin.set(exportedValue, new _aureliaMetadata.Origin(name, key));
       }
     }
 
     return executed;
-  }
-
-  function getCanonicalName(loader, normalized) {
-    var pluginIndex = normalized.indexOf('!');
-    var plugin;
-    if (pluginIndex != -1) {
-      plugin = normalized.substr(pluginIndex + 1);
-      normalized = normalized.substr(0, pluginIndex);
-    }
-
-    if (loader.defaultJSExtensions && normalized.split('/').pop().split('.').pop() == 'js') {
-      var isDefaultExtensionPackage = false;
-      for (var p in loader.packages) {
-        if (normalized.substr(0, p.length) == p && (normalized.length == p.length || normalized[p.length] == '/')) {
-          if ('defaultExtension' in loader.packages[p]) isDefaultExtensionPackage = true;
-        }
-      }
-
-      if (!isDefaultExtensionPackage) normalized = normalized.substr(0, normalized.length - 3);
-    }
-
-    var pathMatch,
-        pathMatchLength = 0;
-    var curMatchLength;
-    for (var p in loader.paths) {
-      var curPath = new url(loader.paths[p], loader.baseURL).href;
-
-      var wIndex = curPath.indexOf('*');
-      if (wIndex === -1) {
-        if (normalized === curPath) {
-          curMatchLength = curPath.split('/').length;
-          if (curMatchLength > pathMatchLength) {
-            pathMatch = p;
-            pathMatchLength = curMatchLength;
-          }
-        }
-      } else {
-        if (normalized.substr(0, wIndex) === curPath.substr(0, wIndex) && normalized.substr(normalized.length - curPath.length + wIndex + 1) === curPath.substr(wIndex + 1)) {
-          curMatchLength = curPath.split('/').length;
-          if (curMatchLength > pathMatchLength) {
-            pathMatch = p.replace('*', normalized.substr(wIndex, normalized.length - curPath.length + 1));
-            pathMatchLength = curMatchLength;
-          }
-        }
-      }
-    }
-
-    if (!pathMatch) {
-      if (normalized.substr(0, loader.baseURL.length) == loader.baseURL) pathMatch = normalized.substr(loader.baseURL.length);else pathMatch = normalized;
-    }
-
-    if (plugin) pathMatch += '!' + getCanonicalName(loader, plugin);
-
-    return pathMatch;
   }
 
   var DefaultLoader = (function (_Loader) {
@@ -139,74 +132,37 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
 
       _Loader.call(this);
 
+      this.textPluginName = 'text';
       this.moduleRegistry = {};
+      this.useTemplateLoader(new TextTemplateLoader());
+
       var that = this;
 
-      if (polyfilled) {
-        define('view', [], {
-          'load': function load(name, req, onload, config) {
-            var entry = that.getOrCreateTemplateRegistryEntry(name),
-                address;
-
-            if (entry.templateIsLoaded) {
-              onload(entry);
-              return;
-            }
-
-            that.findBundledTemplate(name, entry).then(function (found) {
-              if (found) {
-                onload(entry);
-              } else {
-                address = req.toUrl(name);
-
-                that.importTemplate(address).then(function (template) {
-                  entry.setTemplate(template);
-                  onload(entry);
-                });
-              }
-            });
-          }
-        });
-      } else {
-        System.set('view', System.newModule({
-          'fetch': function fetch(load, _fetch) {
-            var name = getCanonicalName(this, load.name);
-            var id = name.substring(0, name.indexOf('!'));
-            var entry = load.metadata.templateRegistryEntry = that.getOrCreateTemplateRegistryEntry(id);
-
-            if (entry.templateIsLoaded) {
-              return '';
-            }
-
-            return that.findBundledTemplate(name, entry).then(function (found) {
-              if (found) {
-                return '';
-              }
-
-              return that.importTemplate(load.address).then(function (template) {
-                entry.setTemplate(template);
-                return '';
-              });
-            });
-          },
-          'instantiate': function instantiate(load) {
-            return load.metadata.templateRegistryEntry;
-          }
-        }));
-      }
+      this.addPlugin('template-registry-entry', {
+        'fetch': function fetch(address) {
+          var entry = that.getOrCreateTemplateRegistryEntry(address);
+          return entry.templateIsLoaded ? entry : that.templateLoader.loadTemplate(that, entry).then(function (x) {
+            return entry;
+          });
+        }
+      });
     }
 
+    DefaultLoader.prototype.useTemplateLoader = function useTemplateLoader(templateLoader) {
+      this.templateLoader = templateLoader;
+    };
+
     DefaultLoader.prototype.loadModule = function loadModule(id) {
-      var _this = this;
+      var _this2 = this;
 
       return System.normalize(id).then(function (newId) {
-        var existing = _this.moduleRegistry[newId];
+        var existing = _this2.moduleRegistry[newId];
         if (existing) {
           return existing;
         }
 
         return System['import'](newId).then(function (m) {
-          _this.moduleRegistry[newId] = m;
+          _this2.moduleRegistry[newId] = m;
           return ensureOriginOnExports(m, newId);
         });
       });
@@ -223,11 +179,40 @@ define(['exports', 'aurelia-metadata', 'aurelia-loader'], function (exports, _au
     };
 
     DefaultLoader.prototype.loadTemplate = function loadTemplate(url) {
-      return polyfilled ? System['import']('view!' + url) : System['import'](url + '!view');
+      return System['import'](this.applyPluginToUrl(url, 'template-registry-entry'));
     };
 
     DefaultLoader.prototype.loadText = function loadText(url) {
-      return polyfilled ? System['import']('text!' + url) : System['import'](url + '!text');
+      return System['import'](this.applyPluginToUrl(url, this.textPluginName));
+    };
+
+    DefaultLoader.prototype.applyPluginToUrl = function applyPluginToUrl(url, pluginName) {
+      return polyfilled ? pluginName + '!' + url : url + '!' + pluginName;
+    };
+
+    DefaultLoader.prototype.addPlugin = function addPlugin(pluginName, implementation) {
+      if (polyfilled) {
+        define(pluginName, [], {
+          'load': function load(name, req, onload) {
+            var address = req.toUrl(name);
+            var result = implementation.fetch(address);
+            Promise.resolve(result).then(onload);
+          }
+        });
+      } else {
+        System.set(pluginName, System.newModule({
+          'fetch': function fetch(load, _fetch) {
+            var result = implementation.fetch(load.address);
+            return Promise.resolve(result).then(function (x) {
+              load.metadata.result = x;
+              return '';
+            });
+          },
+          'instantiate': function instantiate(load) {
+            return load.metadata.result;
+          }
+        }));
+      }
     };
 
     return DefaultLoader;
