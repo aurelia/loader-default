@@ -28,7 +28,7 @@ describe('the system.js loader', () => {
       it("should fail if the module doesn't exist", (done) => {
         loader.loadModule('notHere')
           .then(result => expect(false).toBeTruthy('No module should have been found'))
-          .catch(reason => expect(reason).toEqual(jasmine.any(String)))
+          .catch(reason => expect(reason).toEqual(jasmine.any(Error)))
           .then(done);
       });
 
@@ -66,7 +66,7 @@ describe('the system.js loader', () => {
       it("will fail if any modules fail to load", (done) => {
         loader.loadAllModules(['baseModule', 'doesntExist'])
           .then(() => expect(false).toBeTruthy('No Modules should have loaded'))
-          .catch((reason) => expect(reason).toEqual(jasmine.any(String)))
+          .catch((reason) => expect(reason).toEqual(jasmine.any(Error)))
           .then(done);
       });
     });
