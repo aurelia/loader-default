@@ -2,6 +2,7 @@
 import {Origin} from 'aurelia-metadata';
 import {TemplateRegistryEntry, Loader} from 'aurelia-loader';
 import {TextTemplateLoader} from './text-template-loader';
+import {PLATFORM} from 'aurelia-pal';
 
 function ensureOriginOnExports(executed, name) {
   let target = executed;
@@ -71,16 +72,16 @@ export class DefaultLoader extends Loader {
   }
 }
 
-if (!window.System || !window.System.import) {
-  if (window.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
+  if (PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
     let defined = requirejs.s.contexts._.defined;
-    window.eachModule = function(callback) {
+    PLATFORM.eachModule = function(callback) {
       for (let key in defined) {
         if (callback(key, defined[key])) return;
       }
     };
   } else {
-    window.eachModule = function(callback) {};
+    PLATFORM.eachModule = function(callback) {};
   }
 
   DefaultLoader.prototype._import = function(moduleId) {
@@ -125,7 +126,7 @@ if (!window.System || !window.System.import) {
 } else {
   let modules = System._loader.modules;
 
-  window.eachModule = function(callback) {
+  PLATFORM.eachModule = function(callback) {
     for (let key in modules) {
       if (callback(key, modules[key].module)) return;
     }
