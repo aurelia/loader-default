@@ -72,6 +72,8 @@ export class DefaultLoader extends Loader {
   }
 }
 
+PLATFORM.Loader = DefaultLoader;
+
 if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   if (PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
     let defined = requirejs.s.contexts._.defined;
