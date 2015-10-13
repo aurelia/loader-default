@@ -139,8 +139,8 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
 
           return new Promise(function (resolve, reject) {
             require([id], function (m) {
-              _this.moduleRegistry[newId] = m;
-              resolve(ensureOriginOnExports(m, newId));
+              _this.moduleRegistry[id] = m;
+              resolve(ensureOriginOnExports(m, id));
             }, reject);
           });
         };
