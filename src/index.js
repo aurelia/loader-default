@@ -100,8 +100,8 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
 
     return new Promise((resolve, reject) => {
       require([id], m => {
-        this.moduleRegistry[newId] = m;
-        resolve(ensureOriginOnExports(m, newId));
+        this.moduleRegistry[id] = m;
+        resolve(ensureOriginOnExports(m, id));
       }, reject);
     });
   };
