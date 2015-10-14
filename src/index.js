@@ -76,8 +76,8 @@ PLATFORM.Loader = DefaultLoader;
 
 if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   if (PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
-    let defined = requirejs.s.contexts._.defined;
     PLATFORM.eachModule = function(callback) {
+      let defined = requirejs.s.contexts._.defined;
       for (let key in defined) {
         if (callback(key, defined[key])) return;
       }
@@ -126,9 +126,8 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
     });
   };
 } else {
-  let modules = System._loader.modules;
-
   PLATFORM.eachModule = function(callback) {
+    let modules = System._loader.modules;
     for (let key in modules) {
       if (callback(key, modules[key].module)) return;
     }
