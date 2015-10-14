@@ -111,14 +111,12 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
 
       if (!PLATFORM.global.System || !PLATFORM.global.System['import']) {
         if (PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
-          (function () {
+          PLATFORM.eachModule = function (callback) {
             var defined = requirejs.s.contexts._.defined;
-            PLATFORM.eachModule = function (callback) {
-              for (var key in defined) {
-                if (callback(key, defined[key])) return;
-              }
-            };
-          })();
+            for (var key in defined) {
+              if (callback(key, defined[key])) return;
+            }
+          };
         } else {
           PLATFORM.eachModule = function (callback) {};
         }
@@ -165,68 +163,65 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
           });
         };
       } else {
-        (function () {
+        PLATFORM.eachModule = function (callback) {
           var modules = System._loader.modules;
+          for (var key in modules) {
+            if (callback(key, modules[key].module)) return;
+          }
+        };
 
-          PLATFORM.eachModule = function (callback) {
-            for (var key in modules) {
-              if (callback(key, modules[key].module)) return;
-            }
-          };
+        System.set('text', System.newModule({
+          'translate': function translate(load) {
+            return 'module.exports = "' + load.source.replace(/(["\\])/g, '\\$1').replace(/[\f]/g, '\\f').replace(/[\b]/g, '\\b').replace(/[\n]/g, '\\n').replace(/[\t]/g, '\\t').replace(/[\r]/g, '\\r').replace(/[\u2028]/g, '\\u2028').replace(/[\u2029]/g, '\\u2029') + '";';
+          }
+        }));
 
-          System.set('text', System.newModule({
-            'translate': function translate(load) {
-              return 'module.exports = "' + load.source.replace(/(["\\])/g, '\\$1').replace(/[\f]/g, '\\f').replace(/[\b]/g, '\\b').replace(/[\n]/g, '\\n').replace(/[\t]/g, '\\t').replace(/[\r]/g, '\\r').replace(/[\u2028]/g, '\\u2028').replace(/[\u2029]/g, '\\u2029') + '";';
+        DefaultLoader.prototype._import = function (moduleId) {
+          return System['import'](moduleId);
+        };
+
+        DefaultLoader.prototype.loadModule = function (id) {
+          var _this2 = this;
+
+          var newId = System.normalizeSync(id);
+          var existing = this.moduleRegistry[newId];
+
+          if (existing) {
+            return Promise.resolve(existing);
+          }
+
+          return System['import'](newId).then(function (m) {
+            _this2.moduleRegistry[newId] = m;
+            return ensureOriginOnExports(m, newId);
+          });
+        };
+
+        DefaultLoader.prototype.map = function (id, source) {
+          System.map[id] = source;
+        };
+
+        DefaultLoader.prototype.normalizeSync = function (moduleId, relativeTo) {
+          return System.normalizeSync(moduleId, relativeTo);
+        };
+
+        DefaultLoader.prototype.applyPluginToUrl = function (url, pluginName) {
+          return url + '!' + pluginName;
+        };
+
+        DefaultLoader.prototype.addPlugin = function (pluginName, implementation) {
+          System.set(pluginName, System.newModule({
+            'fetch': function fetch(load, _fetch) {
+              var result = implementation.fetch(load.address);
+              return Promise.resolve(result).then(function (x) {
+                load.metadata.result = x;
+                return '';
+              });
+            },
+            'instantiate': function instantiate(load) {
+              return load.metadata.result;
             }
           }));
-
-          DefaultLoader.prototype._import = function (moduleId) {
-            return System['import'](moduleId);
-          };
-
-          DefaultLoader.prototype.loadModule = function (id) {
-            var _this2 = this;
-
-            var newId = System.normalizeSync(id);
-            var existing = this.moduleRegistry[newId];
-
-            if (existing) {
-              return Promise.resolve(existing);
-            }
-
-            return System['import'](newId).then(function (m) {
-              _this2.moduleRegistry[newId] = m;
-              return ensureOriginOnExports(m, newId);
-            });
-          };
-
-          DefaultLoader.prototype.map = function (id, source) {
-            System.map[id] = source;
-          };
-
-          DefaultLoader.prototype.normalizeSync = function (moduleId, relativeTo) {
-            return System.normalizeSync(moduleId, relativeTo);
-          };
-
-          DefaultLoader.prototype.applyPluginToUrl = function (url, pluginName) {
-            return url + '!' + pluginName;
-          };
-
-          DefaultLoader.prototype.addPlugin = function (pluginName, implementation) {
-            System.set(pluginName, System.newModule({
-              'fetch': function fetch(load, _fetch) {
-                var result = implementation.fetch(load.address);
-                return Promise.resolve(result).then(function (x) {
-                  load.metadata.result = x;
-                  return '';
-                });
-              },
-              'instantiate': function instantiate(load) {
-                return load.metadata.result;
-              }
-            }));
-          };
-        })();
+        };
       }
     }
   };
