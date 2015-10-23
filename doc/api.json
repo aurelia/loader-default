@@ -13,6 +13,9 @@
       "flags": {
         "isExported": true
       },
+      "comment": {
+        "shortText": "A default implementation of the Loader abstraction which works with SystemJS, RequireJS and Dojo Loader."
+      },
       "children": [
         {
           "id": 15,
@@ -22,6 +25,9 @@
           "flags": {
             "isExported": true
           },
+          "comment": {
+            "shortText": "Creates an instance of the DefaultLoader."
+          },
           "signatures": [
             {
               "id": 16,
@@ -29,6 +35,9 @@
               "kind": 16384,
               "kindString": "Constructor signature",
               "flags": {},
+              "comment": {
+                "shortText": "Creates an instance of the DefaultLoader."
+              },
               "type": {
                 "type": "reference",
                 "name": "DefaultLoader",
@@ -55,6 +64,9 @@
           "kindString": "Property",
           "flags": {
             "isExported": true
+          },
+          "comment": {
+            "shortText": "The name of the underlying native loader plugin used to load text."
           },
           "type": {
             "type": "instrinct",
@@ -237,6 +249,10 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Loads a collection of modules.",
+                "returns": "A Promise for an array of loaded modules.\n"
+              },
               "parameters": [
                 {
                   "id": 22,
@@ -244,6 +260,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The set of module ids to load."
+                  },
                   "type": {
                     "type": "instrinct",
                     "isArray": true,
@@ -341,6 +360,10 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Loads a template.",
+                "returns": "A Promise for a TemplateRegistryEntry containing the template.\n"
+              },
               "parameters": [
                 {
                   "id": 25,
@@ -348,6 +371,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The url of the template to load."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -393,6 +419,10 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Loads a text-based resource.",
+                "returns": "A Promise for text content.\n"
+              },
               "parameters": [
                 {
                   "id": 28,
@@ -400,6 +430,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The url of the text file to load."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -556,6 +589,9 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Instructs the loader to use a specific TemplateLoader instance for loading templates"
+              },
               "parameters": [
                 {
                   "id": 19,
@@ -563,6 +599,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The instance of TemplateLoader to use for loading templates.\n"
+                  },
                   "type": {
                     "type": "reference",
                     "name": "TemplateLoader",
@@ -627,6 +666,9 @@
       "flags": {
         "isExported": true
       },
+      "comment": {
+        "shortText": "An implementation of the TemplateLoader interface implemented with text-based loading."
+      },
       "children": [
         {
           "id": 9,
@@ -643,6 +685,10 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Loads a template.",
+                "returns": "A promise which resolves when the TemplateRegistryEntry is loaded with a template.\n"
+              },
               "parameters": [
                 {
                   "id": 11,
@@ -650,6 +696,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The loader that is requesting the template load."
+                  },
                   "type": {
                     "type": "reference",
                     "name": "Loader",
@@ -663,6 +712,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The TemplateRegistryEntry to load and populate with a template."
+                  },
                   "type": {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
@@ -702,6 +754,9 @@
       "kindString": "Interface",
       "flags": {
         "isExported": true
+      },
+      "comment": {
+        "shortText": "Represents a template loader."
       },
       "children": [
         {
