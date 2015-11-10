@@ -47,14 +47,14 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.__constructor",
-                "id": 85
+                "id": 83
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.__constructor",
-            "id": 85
+            "id": 83
           }
         },
         {
@@ -88,6 +88,9 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Registers a plugin with the loader."
+              },
               "parameters": [
                 {
                   "id": 46,
@@ -95,6 +98,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The name of the plugin."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -106,6 +112,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The plugin implementation.\n"
+                  },
                   "type": {
                     "type": "reference",
                     "name": "LoaderPlugin",
@@ -121,14 +130,14 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.addPlugin",
-                "id": 111
+                "id": 109
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.addPlugin",
-            "id": 111
+            "id": 109
           }
         },
         {
@@ -146,6 +155,10 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Alters a module id so that it includes a plugin loader.",
+                "returns": "The plugin-based module id.\n"
+              },
               "parameters": [
                 {
                   "id": 42,
@@ -153,6 +166,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The url of the module to load."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -164,6 +180,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The plugin to apply to the module id."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -177,14 +196,14 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.applyPluginToUrl",
-                "id": 107
+                "id": 105
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.applyPluginToUrl",
-            "id": 107
+            "id": 105
           }
         },
         {
@@ -202,13 +221,20 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Gets or creates a TemplateRegistryEntry for the provided address.",
+                "returns": "The located or created TemplateRegistryEntry.\n"
+              },
               "parameters": [
                 {
                   "id": 50,
-                  "name": "id",
+                  "name": "address",
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The address of the template."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -218,20 +244,20 @@
               "type": {
                 "type": "reference",
                 "name": "TemplateRegistryEntry",
-                "id": 65,
+                "id": 67,
                 "moduleName": "\"aurelia-loader\""
               },
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.getOrCreateTemplateRegistryEntry",
-                "id": 115
+                "id": 113
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.getOrCreateTemplateRegistryEntry",
-            "id": 115
+            "id": 113
           }
         },
         {
@@ -284,14 +310,14 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadAllModules",
-                "id": 98
+                "id": 96
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadAllModules",
-            "id": 98
+            "id": 96
           }
         },
         {
@@ -309,6 +335,10 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Loads a module.",
+                "returns": "A Promise for the loaded module.\n"
+              },
               "parameters": [
                 {
                   "id": 39,
@@ -316,6 +346,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The module id to normalize."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -335,14 +368,14 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.loadModule",
-                "id": 95
+                "id": 93
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.loadModule",
-            "id": 95
+            "id": 93
           }
         },
         {
@@ -387,21 +420,21 @@
                   {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
-                    "id": 65
+                    "id": 67
                   }
                 ]
               },
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadTemplate",
-                "id": 101
+                "id": 99
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadTemplate",
-            "id": 101
+            "id": 99
           }
         },
         {
@@ -452,14 +485,14 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadText",
-                "id": 104
+                "id": 102
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadText",
-            "id": 104
+            "id": 102
           }
         },
         {
@@ -477,6 +510,9 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Maps a module id to a source."
+              },
               "parameters": [
                 {
                   "id": 31,
@@ -484,6 +520,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The module id."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -495,6 +534,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The source to map the module to.\n"
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -508,14 +550,14 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.map",
-                "id": 87
+                "id": 85
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.map",
-            "id": 87
+            "id": 85
           }
         },
         {
@@ -533,6 +575,10 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Normalizes a module id.",
+                "returns": "The normalized module id.\n"
+              },
               "parameters": [
                 {
                   "id": 35,
@@ -540,6 +586,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The module id to normalize."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -551,6 +600,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "What the module id should be normalized relative to."
+                  },
                   "type": {
                     "type": "instrinct",
                     "name": "string"
@@ -564,14 +616,14 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.normalizeSync",
-                "id": 91
+                "id": 89
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.normalizeSync",
-            "id": 91
+            "id": 89
           }
         },
         {
@@ -654,7 +706,7 @@
         {
           "type": "reference",
           "name": "Loader",
-          "id": 84
+          "id": 82
         }
       ]
     },
@@ -702,7 +754,7 @@
                   "type": {
                     "type": "reference",
                     "name": "Loader",
-                    "id": 84,
+                    "id": 82,
                     "moduleName": "\"aurelia-loader\""
                   }
                 },
@@ -718,7 +770,7 @@
                   "type": {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
-                    "id": 65,
+                    "id": 67,
                     "moduleName": "\"aurelia-loader\""
                   }
                 }
@@ -784,7 +836,7 @@
                   "type": {
                     "type": "reference",
                     "name": "Loader",
-                    "id": 84
+                    "id": 82
                   }
                 },
                 {
@@ -796,7 +848,7 @@
                   "type": {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
-                    "id": 65
+                    "id": 67
                   }
                 }
               ],

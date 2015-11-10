@@ -47,7 +47,7 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
 
         TextTemplateLoader.prototype.loadTemplate = function loadTemplate(loader, entry) {
           return loader.loadText(entry.address).then(function (text) {
-            entry.setTemplate(DOM.createTemplateFromMarkup(text));
+            entry.template = DOM.createTemplateFromMarkup(text);
           });
         };
 

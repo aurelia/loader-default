@@ -1,3 +1,11 @@
+## 0.12.0 (2015-11-10)
+
+
+#### Bug Fixes
+
+* **text-template-loader:** update to latest template entry api ([9fd102dc](http://github.com/aurelia/loader-default/commit/9fd102dc55af408b0393844442171a7a9b31ca93))
+
+
 ### 0.11.2 (2015-10-13)
 
 

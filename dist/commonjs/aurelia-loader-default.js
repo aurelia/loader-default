@@ -19,7 +19,7 @@ var TextTemplateLoader = (function () {
 
   TextTemplateLoader.prototype.loadTemplate = function loadTemplate(loader, entry) {
     return loader.loadText(entry.address).then(function (text) {
-      entry.setTemplate(_aureliaPal.DOM.createTemplateFromMarkup(text));
+      entry.template = _aureliaPal.DOM.createTemplateFromMarkup(text);
     });
   };
 
