@@ -826,6 +826,10 @@
               "kind": 4096,
               "kindString": "Call signature",
               "flags": {},
+              "comment": {
+                "shortText": "Loads a template.",
+                "returns": "A promise which resolves when the TemplateRegistryEntry is loaded with a template.\n"
+              },
               "parameters": [
                 {
                   "id": 6,
@@ -833,6 +837,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The loader that is requesting the template load."
+                  },
                   "type": {
                     "type": "reference",
                     "name": "Loader",
@@ -845,6 +852,9 @@
                   "kind": 32768,
                   "kindString": "Parameter",
                   "flags": {},
+                  "comment": {
+                    "text": "The TemplateRegistryEntry to load and populate with a template."
+                  },
                   "type": {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",

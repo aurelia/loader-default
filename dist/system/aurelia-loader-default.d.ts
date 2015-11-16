@@ -7,6 +7,13 @@ declare module 'aurelia-loader-default' {
   * Represents a template loader.
   */
   export interface TemplateLoader {
+    
+    /**
+      * Loads a template.
+      * @param loader The loader that is requesting the template load.
+      * @param entry The TemplateRegistryEntry to load and populate with a template.
+      * @return A promise which resolves when the TemplateRegistryEntry is loaded with a template.
+      */
     loadTemplate(loader: Loader, entry: TemplateRegistryEntry): Promise<any>;
   }
   
