@@ -1,3 +1,11 @@
+## 1.0.0-beta.1.0.1 (2015-11-17)
+
+
+#### Bug Fixes
+
+* **index:** firefox can die on some module getter accessors ([97dee32c](http://github.com/aurelia/loader-default/commit/97dee32c0df0359ec722ea852ab5529e98ae34be))
+
+
 ### 1.0.0-beta.1 (2015-11-16)
 
 

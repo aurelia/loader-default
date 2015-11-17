@@ -132,7 +132,9 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
     PLATFORM.eachModule = function(callback) {
       let defined = requirejs.s.contexts._.defined;
       for (let key in defined) {
-        if (callback(key, defined[key])) return;
+        try {
+          if (callback(key, defined[key])) return;
+        } catch(e) {}
       }
     };
   } else {
@@ -181,8 +183,11 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
 } else {
   PLATFORM.eachModule = function(callback) {
     let modules = System._loader.modules;
+
     for (let key in modules) {
-      if (callback(key, modules[key].module)) return;
+      try {
+        if (callback(key, modules[key].module)) return;
+      } catch(e) {}
     }
   };
 

@@ -103,7 +103,9 @@ define(['exports', 'aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], functio
       _aureliaPal.PLATFORM.eachModule = function (callback) {
         var defined = requirejs.s.contexts._.defined;
         for (var key in defined) {
-          if (callback(key, defined[key])) return;
+          try {
+            if (callback(key, defined[key])) return;
+          } catch (e) {}
         }
       };
     } else {
@@ -154,8 +156,11 @@ define(['exports', 'aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], functio
   } else {
     _aureliaPal.PLATFORM.eachModule = function (callback) {
       var modules = System._loader.modules;
+
       for (var key in modules) {
-        if (callback(key, modules[key].module)) return;
+        try {
+          if (callback(key, modules[key].module)) return;
+        } catch (e) {}
       }
     };
 
