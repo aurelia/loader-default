@@ -133,7 +133,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
 
   DefaultLoader.prototype.loadModule = function(id) {
     let existing = this.moduleRegistry[id];
-    if (existing) {
+    if (existing !== undefined) {
       return Promise.resolve(existing);
     }
 
@@ -146,6 +146,10 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 
   DefaultLoader.prototype.map = function(id, source) {};
+
+  DefaultLoader.prototype.normalize = function(moduleId, relativeTo) {
+    return Promise.resolve(moduleId);
+  };
 
   DefaultLoader.prototype.normalizeSync = function(moduleId, relativeTo) {
     return moduleId;
@@ -195,16 +199,14 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 
   DefaultLoader.prototype.loadModule = function(id) {
-    let newId = System.normalizeSync(id);
-    let existing = this.moduleRegistry[newId];
-
-    if (existing) {
+    let existing = this.moduleRegistry[id];
+    if (existing !== undefined) {
       return Promise.resolve(existing);
     }
 
-    return System.import(newId).then(m => {
-      this.moduleRegistry[newId] = m;
-      return ensureOriginOnExports(m, newId);
+    return System.import(id).then(m => {
+      this.moduleRegistry[id] = m;
+      return ensureOriginOnExports(m, id);
     });
   };
 
@@ -214,6 +216,10 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
 
   DefaultLoader.prototype.normalizeSync = function(moduleId, relativeTo) {
     return System.normalizeSync(moduleId, relativeTo);
+  };
+
+  DefaultLoader.prototype.normalize = function(moduleId, relativeTo) {
+    return System.normalize(moduleId, relativeTo);
   };
 
   DefaultLoader.prototype.applyPluginToUrl = function(url, pluginName) {
