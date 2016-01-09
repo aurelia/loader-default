@@ -47,14 +47,14 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.__constructor",
-                "id": 83
+                "id": 87
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.__constructor",
-            "id": 83
+            "id": 87
           }
         },
         {
@@ -74,7 +74,7 @@
           }
         },
         {
-          "id": 44,
+          "id": 48,
           "name": "addPlugin",
           "kind": 2048,
           "kindString": "Method",
@@ -83,7 +83,7 @@
           },
           "signatures": [
             {
-              "id": 45,
+              "id": 49,
               "name": "addPlugin",
               "kind": 4096,
               "kindString": "Call signature",
@@ -93,7 +93,7 @@
               },
               "parameters": [
                 {
-                  "id": 46,
+                  "id": 50,
                   "name": "pluginName",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -107,7 +107,7 @@
                   }
                 },
                 {
-                  "id": 47,
+                  "id": 51,
                   "name": "implementation",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -118,7 +118,7 @@
                   "type": {
                     "type": "reference",
                     "name": "LoaderPlugin",
-                    "id": 56,
+                    "id": 60,
                     "moduleName": "\"aurelia-loader\""
                   }
                 }
@@ -130,18 +130,18 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.addPlugin",
-                "id": 109
+                "id": 117
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.addPlugin",
-            "id": 109
+            "id": 117
           }
         },
         {
-          "id": 40,
+          "id": 44,
           "name": "applyPluginToUrl",
           "kind": 2048,
           "kindString": "Method",
@@ -150,7 +150,7 @@
           },
           "signatures": [
             {
-              "id": 41,
+              "id": 45,
               "name": "applyPluginToUrl",
               "kind": 4096,
               "kindString": "Call signature",
@@ -161,7 +161,7 @@
               },
               "parameters": [
                 {
-                  "id": 42,
+                  "id": 46,
                   "name": "url",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -175,7 +175,7 @@
                   }
                 },
                 {
-                  "id": 43,
+                  "id": 47,
                   "name": "pluginName",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -196,18 +196,18 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.applyPluginToUrl",
-                "id": 105
+                "id": 113
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.applyPluginToUrl",
-            "id": 105
+            "id": 113
           }
         },
         {
-          "id": 48,
+          "id": 52,
           "name": "getOrCreateTemplateRegistryEntry",
           "kind": 2048,
           "kindString": "Method",
@@ -216,7 +216,7 @@
           },
           "signatures": [
             {
-              "id": 49,
+              "id": 53,
               "name": "getOrCreateTemplateRegistryEntry",
               "kind": 4096,
               "kindString": "Call signature",
@@ -227,7 +227,7 @@
               },
               "parameters": [
                 {
-                  "id": 50,
+                  "id": 54,
                   "name": "address",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -244,20 +244,20 @@
               "type": {
                 "type": "reference",
                 "name": "TemplateRegistryEntry",
-                "id": 67,
+                "id": 71,
                 "moduleName": "\"aurelia-loader\""
               },
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.getOrCreateTemplateRegistryEntry",
-                "id": 113
+                "id": 121
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.getOrCreateTemplateRegistryEntry",
-            "id": 113
+            "id": 121
           }
         },
         {
@@ -310,18 +310,18 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadAllModules",
-                "id": 96
+                "id": 104
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadAllModules",
-            "id": 96
+            "id": 104
           }
         },
         {
-          "id": 37,
+          "id": 41,
           "name": "loadModule",
           "kind": 2048,
           "kindString": "Method",
@@ -330,7 +330,7 @@
           },
           "signatures": [
             {
-              "id": 38,
+              "id": 42,
               "name": "loadModule",
               "kind": 4096,
               "kindString": "Call signature",
@@ -341,7 +341,7 @@
               },
               "parameters": [
                 {
-                  "id": 39,
+                  "id": 43,
                   "name": "id",
                   "kind": 32768,
                   "kindString": "Parameter",
@@ -368,14 +368,14 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.loadModule",
-                "id": 93
+                "id": 101
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.loadModule",
-            "id": 93
+            "id": 101
           }
         },
         {
@@ -420,21 +420,21 @@
                   {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
-                    "id": 67
+                    "id": 71
                   }
                 ]
               },
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadTemplate",
-                "id": 99
+                "id": 107
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadTemplate",
-            "id": 99
+            "id": 107
           }
         },
         {
@@ -485,14 +485,14 @@
               "overwrites": {
                 "type": "reference",
                 "name": "Loader.loadText",
-                "id": 102
+                "id": 110
               }
             }
           ],
           "overwrites": {
             "type": "reference",
             "name": "Loader.loadText",
-            "id": 102
+            "id": 110
           }
         },
         {
@@ -550,14 +550,86 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.map",
-                "id": 85
+                "id": 89
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.map",
-            "id": 85
+            "id": 89
+          }
+        },
+        {
+          "id": 37,
+          "name": "normalize",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 38,
+              "name": "normalize",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Normalizes a module id.",
+                "returns": "A promise for the normalized module id.\n"
+              },
+              "parameters": [
+                {
+                  "id": 39,
+                  "name": "moduleId",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "The module id to normalize."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 40,
+                  "name": "relativeTo",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "comment": {
+                    "text": "What the module id should be normalized relative to."
+                  },
+                  "type": {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "Promise",
+                "typeArguments": [
+                  {
+                    "type": "instrinct",
+                    "name": "string"
+                  }
+                ]
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "name": "Loader.normalize",
+                "id": 97
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Loader.normalize",
+            "id": 97
           }
         },
         {
@@ -616,14 +688,14 @@
               "inheritedFrom": {
                 "type": "reference",
                 "name": "Loader.normalizeSync",
-                "id": 89
+                "id": 93
               }
             }
           ],
           "inheritedFrom": {
             "type": "reference",
             "name": "Loader.normalizeSync",
-            "id": 89
+            "id": 93
           }
         },
         {
@@ -689,14 +761,15 @@
           "title": "Methods",
           "kind": 2048,
           "children": [
-            44,
-            40,
             48,
+            44,
+            52,
             20,
-            37,
+            41,
             23,
             26,
             29,
+            37,
             33,
             17
           ]
@@ -706,7 +779,7 @@
         {
           "type": "reference",
           "name": "Loader",
-          "id": 82
+          "id": 86
         }
       ]
     },
@@ -754,7 +827,7 @@
                   "type": {
                     "type": "reference",
                     "name": "Loader",
-                    "id": 82,
+                    "id": 86,
                     "moduleName": "\"aurelia-loader\""
                   }
                 },
@@ -770,7 +843,7 @@
                   "type": {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
-                    "id": 67,
+                    "id": 71,
                     "moduleName": "\"aurelia-loader\""
                   }
                 }
@@ -843,7 +916,7 @@
                   "type": {
                     "type": "reference",
                     "name": "Loader",
-                    "id": 82
+                    "id": 86
                   }
                 },
                 {
@@ -858,7 +931,7 @@
                   "type": {
                     "type": "reference",
                     "name": "TemplateRegistryEntry",
-                    "id": 67
+                    "id": 71
                   }
                 }
               ],

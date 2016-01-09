@@ -133,7 +133,7 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
           var _this = this;
 
           var existing = this.moduleRegistry[id];
-          if (existing) {
+          if (existing !== undefined) {
             return Promise.resolve(existing);
           }
 
@@ -146,6 +146,10 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
         };
 
         DefaultLoader.prototype.map = function (id, source) {};
+
+        DefaultLoader.prototype.normalize = function (moduleId, relativeTo) {
+          return Promise.resolve(moduleId);
+        };
 
         DefaultLoader.prototype.normalizeSync = function (moduleId, relativeTo) {
           return moduleId;
@@ -188,16 +192,14 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
         DefaultLoader.prototype.loadModule = function (id) {
           var _this2 = this;
 
-          var newId = System.normalizeSync(id);
-          var existing = this.moduleRegistry[newId];
-
-          if (existing) {
+          var existing = this.moduleRegistry[id];
+          if (existing !== undefined) {
             return Promise.resolve(existing);
           }
 
-          return System['import'](newId).then(function (m) {
-            _this2.moduleRegistry[newId] = m;
-            return ensureOriginOnExports(m, newId);
+          return System['import'](id).then(function (m) {
+            _this2.moduleRegistry[id] = m;
+            return ensureOriginOnExports(m, id);
           });
         };
 
@@ -207,6 +209,10 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
 
         DefaultLoader.prototype.normalizeSync = function (moduleId, relativeTo) {
           return System.normalizeSync(moduleId, relativeTo);
+        };
+
+        DefaultLoader.prototype.normalize = function (moduleId, relativeTo) {
+          return System.normalize(moduleId, relativeTo);
         };
 
         DefaultLoader.prototype.applyPluginToUrl = function (url, pluginName) {

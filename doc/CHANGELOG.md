@@ -1,3 +1,11 @@
+### 1.0.0-beta.1.0.2 (2016-01-08)
+
+
+#### Features
+
+* **all:** remove internal normalizeSync use and add normalize impl ([3c323466](http://github.com/aurelia/loader-default/commit/3c323466f461a9831675aa9421968b2727c50164))
+
+
 ## 1.0.0-beta.1.0.1 (2015-11-17)
 
 
