@@ -181,14 +181,16 @@ define(['exports', 'aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], functio
     DefaultLoader.prototype.loadModule = function (id) {
       var _this2 = this;
 
-      var existing = this.moduleRegistry[id];
-      if (existing !== undefined) {
-        return Promise.resolve(existing);
-      }
+      return System.normalize(id).then(function (newId) {
+        var existing = _this2.moduleRegistry[newId];
+        if (existing !== undefined) {
+          return Promise.resolve(existing);
+        }
 
-      return System['import'](id).then(function (m) {
-        _this2.moduleRegistry[id] = m;
-        return ensureOriginOnExports(m, id);
+        return System['import'](newId).then(function (m) {
+          _this2.moduleRegistry[newId] = m;
+          return ensureOriginOnExports(m, newId);
+        });
       });
     };
 

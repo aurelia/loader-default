@@ -1,3 +1,11 @@
+### 1.0.0-beta.1.1.2 (2016-02-08)
+
+
+#### Bug Fixes
+
+* **index:** properly normalize for systemjs ([aa3c4813](http://github.com/aurelia/loader-default/commit/aa3c48136a829ff1137d8ecb5f367d7b5e05cf0d))
+
+
 ### 1.0.0-beta.1.1.0 (2016-01-29)
 
 

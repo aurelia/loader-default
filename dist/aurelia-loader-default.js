@@ -215,14 +215,16 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 
   DefaultLoader.prototype.loadModule = function(id) {
-    let existing = this.moduleRegistry[id];
-    if (existing !== undefined) {
-      return Promise.resolve(existing);
-    }
+    return System.normalize(id).then(newId => {
+      let existing = this.moduleRegistry[newId];
+      if (existing !== undefined) {
+        return Promise.resolve(existing);
+      }
 
-    return System.import(id).then(m => {
-      this.moduleRegistry[id] = m;
-      return ensureOriginOnExports(m, id);
+      return System.import(newId).then(m => {
+        this.moduleRegistry[newId] = m;
+        return ensureOriginOnExports(m, newId);
+      });
     });
   };
 
