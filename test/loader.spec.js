@@ -1,9 +1,7 @@
+import './setup';
 import {DefaultLoader} from '../src/index';
-import {initialize} from 'aurelia-pal-browser';
 
 describe('the system.js loader', () => {
-  beforeAll(() => initialize());
-
   describe('instance method', () => {
     var loader;
     beforeEach(() => {
