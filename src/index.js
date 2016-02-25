@@ -118,7 +118,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
       for (let key in defined) {
         try {
           if (callback(key, defined[key])) return;
-        } catch(e) {}
+        } catch (e) {}
       }
     };
   } else {
@@ -176,7 +176,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
     for (let key in modules) {
       try {
         if (callback(key, modules[key].module)) return;
-      } catch(e) {}
+      } catch (e) {}
     }
   };
 
