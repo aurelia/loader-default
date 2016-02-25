@@ -160,7 +160,8 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 
   DefaultLoader.prototype.addPlugin = function(pluginName, implementation) {
-    define(pluginName, [], {
+    let nonAnonDefine = define;
+    nonAnonDefine(pluginName, [], {
       'load': function(name, req, onload) {
         let address = req.toUrl(name);
         let result = implementation.fetch(address);
