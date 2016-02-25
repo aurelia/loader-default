@@ -160,7 +160,8 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
         };
 
         DefaultLoader.prototype.addPlugin = function (pluginName, implementation) {
-          define(pluginName, [], {
+          var nonAnonDefine = define;
+          nonAnonDefine(pluginName, [], {
             'load': function load(name, req, onload) {
               var address = req.toUrl(name);
               var result = implementation.fetch(address);

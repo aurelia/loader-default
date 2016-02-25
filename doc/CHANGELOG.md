@@ -1,3 +1,11 @@
+### 1.0.0-beta.1.1.3 (2016-02-25)
+
+
+#### Bug Fixes
+
+* **loader:** alias the loader ([70b7cb83](http://github.com/aurelia/loader-default/commit/70b7cb83a5f78131cdb66bc29398c24fd243b2b1))
+
+
 ### 1.0.0-beta.1.1.2 (2016-02-08)
 
 

@@ -134,7 +134,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
       for (let key in defined) {
         try {
           if (callback(key, defined[key])) return;
-        } catch(e) {}
+        } catch (e) {}
       }
     };
   } else {
@@ -176,7 +176,8 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 
   DefaultLoader.prototype.addPlugin = function(pluginName, implementation) {
-    define(pluginName, [], {
+    let nonAnonDefine = define;
+    nonAnonDefine(pluginName, [], {
       'load': function(name, req, onload) {
         let address = req.toUrl(name);
         let result = implementation.fetch(address);
@@ -191,7 +192,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
     for (let key in modules) {
       try {
         if (callback(key, modules[key].module)) return;
-      } catch(e) {}
+      } catch (e) {}
     }
   };
 

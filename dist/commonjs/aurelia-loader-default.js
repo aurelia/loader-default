@@ -154,7 +154,8 @@ if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System['
   };
 
   DefaultLoader.prototype.addPlugin = function (pluginName, implementation) {
-    define(pluginName, [], {
+    var nonAnonDefine = define;
+    nonAnonDefine(pluginName, [], {
       'load': function load(name, req, onload) {
         var address = req.toUrl(name);
         var result = implementation.fetch(address);
