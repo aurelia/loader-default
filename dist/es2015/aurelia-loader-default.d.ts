@@ -1,7 +1,15 @@
 declare module 'aurelia-loader-default' {
-  import { TemplateRegistryEntry, Loader }  from 'aurelia-loader';
-  import { DOM, PLATFORM }  from 'aurelia-pal';
-  import { Origin }  from 'aurelia-metadata';
+  import {
+    TemplateRegistryEntry,
+    Loader
+  } from 'aurelia-loader';
+  import {
+    DOM,
+    PLATFORM
+  } from 'aurelia-pal';
+  import {
+    Origin
+  } from 'aurelia-metadata';
   
   /**
   * Represents a template loader.
@@ -31,6 +39,9 @@ declare module 'aurelia-loader-default' {
     loadTemplate(loader: Loader, entry: TemplateRegistryEntry): Promise<any>;
   }
   
+  /**
+  * A default implementation of the Loader abstraction which works with SystemJS, RequireJS and Dojo Loader.
+  */
   /**
   * A default implementation of the Loader abstraction which works with SystemJS, RequireJS and Dojo Loader.
   */

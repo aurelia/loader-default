@@ -1,10 +1,9 @@
 'use strict';
 
-exports.__esModule = true;
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DefaultLoader = exports.TextTemplateLoader = undefined;
 
 var _aureliaLoader = require('aurelia-loader');
 
@@ -12,7 +11,13 @@ var _aureliaPal = require('aurelia-pal');
 
 var _aureliaMetadata = require('aurelia-metadata');
 
-var TextTemplateLoader = (function () {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TextTemplateLoader = exports.TextTemplateLoader = function () {
   function TextTemplateLoader() {
     _classCallCheck(this, TextTemplateLoader);
   }
@@ -24,14 +29,12 @@ var TextTemplateLoader = (function () {
   };
 
   return TextTemplateLoader;
-})();
-
-exports.TextTemplateLoader = TextTemplateLoader;
+}();
 
 function ensureOriginOnExports(executed, name) {
   var target = executed;
-  var key = undefined;
-  var exportedValue = undefined;
+  var key = void 0;
+  var exportedValue = void 0;
 
   if (target.__useDefault) {
     target = target['default'];
@@ -50,21 +53,23 @@ function ensureOriginOnExports(executed, name) {
   return executed;
 }
 
-var DefaultLoader = (function (_Loader) {
+var DefaultLoader = exports.DefaultLoader = function (_Loader) {
   _inherits(DefaultLoader, _Loader);
 
   function DefaultLoader() {
     _classCallCheck(this, DefaultLoader);
 
-    _Loader.call(this);
+    var _this = _possibleConstructorReturn(this, _Loader.call(this));
 
-    this.textPluginName = 'text';
-    this.moduleRegistry = {};
-    this.useTemplateLoader(new TextTemplateLoader());
+    _this.textPluginName = 'text';
 
-    var that = this;
 
-    this.addPlugin('template-registry-entry', {
+    _this.moduleRegistry = {};
+    _this.useTemplateLoader(new TextTemplateLoader());
+
+    var that = _this;
+
+    _this.addPlugin('template-registry-entry', {
       'fetch': function fetch(address) {
         var entry = that.getOrCreateTemplateRegistryEntry(address);
         return entry.templateIsLoaded ? entry : that.templateLoader.loadTemplate(that, entry).then(function (x) {
@@ -72,6 +77,7 @@ var DefaultLoader = (function (_Loader) {
         });
       }
     });
+    return _this;
   }
 
   DefaultLoader.prototype.useTemplateLoader = function useTemplateLoader(templateLoader) {
@@ -97,13 +103,11 @@ var DefaultLoader = (function (_Loader) {
   };
 
   return DefaultLoader;
-})(_aureliaLoader.Loader);
-
-exports.DefaultLoader = DefaultLoader;
+}(_aureliaLoader.Loader);
 
 _aureliaPal.PLATFORM.Loader = DefaultLoader;
 
-if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System['import']) {
+if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System.import) {
   if (_aureliaPal.PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
     _aureliaPal.PLATFORM.eachModule = function (callback) {
       var defined = requirejs.s.contexts._.defined;
@@ -124,7 +128,7 @@ if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System['
   };
 
   DefaultLoader.prototype.loadModule = function (id) {
-    var _this = this;
+    var _this2 = this;
 
     var existing = this.moduleRegistry[id];
     if (existing !== undefined) {
@@ -133,7 +137,7 @@ if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System['
 
     return new Promise(function (resolve, reject) {
       require([id], function (m) {
-        _this.moduleRegistry[id] = m;
+        _this2.moduleRegistry[id] = m;
         resolve(ensureOriginOnExports(m, id));
       }, reject);
     });
@@ -181,20 +185,20 @@ if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System['
   }));
 
   DefaultLoader.prototype._import = function (moduleId) {
-    return System['import'](moduleId);
+    return System.import(moduleId);
   };
 
   DefaultLoader.prototype.loadModule = function (id) {
-    var _this2 = this;
+    var _this3 = this;
 
     return System.normalize(id).then(function (newId) {
-      var existing = _this2.moduleRegistry[newId];
+      var existing = _this3.moduleRegistry[newId];
       if (existing !== undefined) {
         return Promise.resolve(existing);
       }
 
-      return System['import'](newId).then(function (m) {
-        _this2.moduleRegistry[newId] = m;
+      return System.import(newId).then(function (m) {
+        _this3.moduleRegistry[newId] = m;
         return ensureOriginOnExports(m, newId);
       });
     });

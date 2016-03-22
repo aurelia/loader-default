@@ -1,16 +1,42 @@
-System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function (_export) {
-  'use strict';
+'use strict';
 
+System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function (_export, _context) {
   var TemplateRegistryEntry, Loader, DOM, PLATFORM, Origin, TextTemplateLoader, DefaultLoader;
 
-  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   function ensureOriginOnExports(executed, name) {
     var target = executed;
-    var key = undefined;
-    var exportedValue = undefined;
+    var key = void 0;
+    var exportedValue = void 0;
 
     if (target.__useDefault) {
       target = target['default'];
@@ -40,7 +66,7 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
       Origin = _aureliaMetadata.Origin;
     }],
     execute: function () {
-      TextTemplateLoader = (function () {
+      _export('TextTemplateLoader', TextTemplateLoader = function () {
         function TextTemplateLoader() {
           _classCallCheck(this, TextTemplateLoader);
         }
@@ -52,25 +78,27 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
         };
 
         return TextTemplateLoader;
-      })();
+      }());
 
       _export('TextTemplateLoader', TextTemplateLoader);
 
-      DefaultLoader = (function (_Loader) {
+      _export('DefaultLoader', DefaultLoader = function (_Loader) {
         _inherits(DefaultLoader, _Loader);
 
         function DefaultLoader() {
           _classCallCheck(this, DefaultLoader);
 
-          _Loader.call(this);
+          var _this = _possibleConstructorReturn(this, _Loader.call(this));
 
-          this.textPluginName = 'text';
-          this.moduleRegistry = {};
-          this.useTemplateLoader(new TextTemplateLoader());
+          _this.textPluginName = 'text';
 
-          var that = this;
 
-          this.addPlugin('template-registry-entry', {
+          _this.moduleRegistry = {};
+          _this.useTemplateLoader(new TextTemplateLoader());
+
+          var that = _this;
+
+          _this.addPlugin('template-registry-entry', {
             'fetch': function fetch(address) {
               var entry = that.getOrCreateTemplateRegistryEntry(address);
               return entry.templateIsLoaded ? entry : that.templateLoader.loadTemplate(that, entry).then(function (x) {
@@ -78,6 +106,7 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
               });
             }
           });
+          return _this;
         }
 
         DefaultLoader.prototype.useTemplateLoader = function useTemplateLoader(templateLoader) {
@@ -103,13 +132,13 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
         };
 
         return DefaultLoader;
-      })(Loader);
+      }(Loader));
 
       _export('DefaultLoader', DefaultLoader);
 
       PLATFORM.Loader = DefaultLoader;
 
-      if (!PLATFORM.global.System || !PLATFORM.global.System['import']) {
+      if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
         if (PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
           PLATFORM.eachModule = function (callback) {
             var defined = requirejs.s.contexts._.defined;
@@ -130,7 +159,7 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
         };
 
         DefaultLoader.prototype.loadModule = function (id) {
-          var _this = this;
+          var _this2 = this;
 
           var existing = this.moduleRegistry[id];
           if (existing !== undefined) {
@@ -139,7 +168,7 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
 
           return new Promise(function (resolve, reject) {
             require([id], function (m) {
-              _this.moduleRegistry[id] = m;
+              _this2.moduleRegistry[id] = m;
               resolve(ensureOriginOnExports(m, id));
             }, reject);
           });
@@ -187,20 +216,20 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
         }));
 
         DefaultLoader.prototype._import = function (moduleId) {
-          return System['import'](moduleId);
+          return System.import(moduleId);
         };
 
         DefaultLoader.prototype.loadModule = function (id) {
-          var _this2 = this;
+          var _this3 = this;
 
           return System.normalize(id).then(function (newId) {
-            var existing = _this2.moduleRegistry[newId];
+            var existing = _this3.moduleRegistry[newId];
             if (existing !== undefined) {
               return Promise.resolve(existing);
             }
 
-            return System['import'](newId).then(function (m) {
-              _this2.moduleRegistry[newId] = m;
+            return System.import(newId).then(function (m) {
+              _this3.moduleRegistry[newId] = m;
               return ensureOriginOnExports(m, newId);
             });
           });
