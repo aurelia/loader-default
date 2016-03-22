@@ -163,8 +163,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
     let nonAnonDefine = define;
     nonAnonDefine(pluginName, [], {
       'load': function(name, req, onload) {
-        let address = req.toUrl(name);
-        let result = implementation.fetch(address);
+        let result = implementation.fetch(name);
         Promise.resolve(result).then(onload);
       }
     });
