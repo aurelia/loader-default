@@ -1,6 +1,8 @@
 ### 1.0.0-beta.1.2.0(2016-03-22)
 
-* Update to Babel 6
+#### Bug Fixes
+
+* **DefaultLoader:** do not map name to address in requirejs mode ([30016b6e](http://github.com/aurelia/loader-default/commit/30016b6ef904228a582863e83b49e8f3c0556e63))
 
 ### 1.0.0-beta.1.1.3 (2016-02-25)
 

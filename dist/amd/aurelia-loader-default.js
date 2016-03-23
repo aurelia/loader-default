@@ -180,8 +180,7 @@ define(['exports', 'aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], functio
       var nonAnonDefine = define;
       nonAnonDefine(pluginName, [], {
         'load': function load(name, req, onload) {
-          var address = req.toUrl(name);
-          var result = implementation.fetch(address);
+          var result = implementation.fetch(name);
           Promise.resolve(result).then(onload);
         }
       });

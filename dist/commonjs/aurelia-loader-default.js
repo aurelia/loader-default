@@ -161,8 +161,7 @@ if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System.i
     var nonAnonDefine = define;
     nonAnonDefine(pluginName, [], {
       'load': function load(name, req, onload) {
-        var address = req.toUrl(name);
-        var result = implementation.fetch(address);
+        var result = implementation.fetch(name);
         Promise.resolve(result).then(onload);
       }
     });
