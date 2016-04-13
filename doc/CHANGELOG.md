@@ -1,3 +1,11 @@
+### 1.0.0-beta.1.2.1 (2016-04-13)
+
+
+#### Bug Fixes
+
+* **index:** ensure correct cache lookup ([b32ff61a](http://github.com/aurelia/loader-default/commit/b32ff61a5fc00eb995bb008d7c1f83fdffa71d7d))
+
+
 ### 1.0.0-beta.1.2.0(2016-03-22)
 
 #### Bug Fixes

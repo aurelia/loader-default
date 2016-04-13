@@ -70,7 +70,7 @@ export class DefaultLoader extends Loader {
   constructor() {
     super();
 
-    this.moduleRegistry = {};
+    this.moduleRegistry = Object.create(null);
     this.useTemplateLoader(new TextTemplateLoader());
 
     let that = this;

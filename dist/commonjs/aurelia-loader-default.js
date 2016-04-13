@@ -64,7 +64,7 @@ var DefaultLoader = exports.DefaultLoader = function (_Loader) {
     _this.textPluginName = 'text';
 
 
-    _this.moduleRegistry = {};
+    _this.moduleRegistry = Object.create(null);
     _this.useTemplateLoader(new TextTemplateLoader());
 
     var that = _this;

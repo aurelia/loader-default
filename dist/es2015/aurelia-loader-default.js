@@ -37,7 +37,7 @@ export let DefaultLoader = class DefaultLoader extends Loader {
     super();
 
     this.textPluginName = 'text';
-    this.moduleRegistry = {};
+    this.moduleRegistry = Object.create(null);
     this.useTemplateLoader(new TextTemplateLoader());
 
     let that = this;

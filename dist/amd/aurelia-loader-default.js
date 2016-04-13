@@ -83,7 +83,7 @@ define(['exports', 'aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], functio
       _this.textPluginName = 'text';
 
 
-      _this.moduleRegistry = {};
+      _this.moduleRegistry = Object.create(null);
       _this.useTemplateLoader(new TextTemplateLoader());
 
       var that = _this;
