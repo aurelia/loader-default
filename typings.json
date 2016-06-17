@@ -1,0 +1,4 @@
+{
+  "name": "aurelia-loader-default",
+  "main": "dist/aurelia-loader-default.d.ts"
+}
