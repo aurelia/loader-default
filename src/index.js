@@ -108,9 +108,9 @@ export class DefaultLoader extends Loader {
     return this._import(this.applyPluginToUrl(url, this.textPluginName)).then(textOrModule => {
       if (typeof textOrModule === 'string') {
         return textOrModule;
-      } else {
-        return textOrModule['default'];
       }
+
+      return textOrModule['default'];
     });
   }
 }
