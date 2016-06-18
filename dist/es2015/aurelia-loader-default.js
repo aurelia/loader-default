@@ -69,7 +69,13 @@ export let DefaultLoader = class DefaultLoader extends Loader {
   }
 
   loadText(url) {
-    return this._import(this.applyPluginToUrl(url, this.textPluginName));
+    return this._import(this.applyPluginToUrl(url, this.textPluginName)).then(textOrModule => {
+      if (typeof textOrModule === 'string') {
+        return textOrModule;
+      }
+
+      return textOrModule['default'];
+    });
   }
 };
 

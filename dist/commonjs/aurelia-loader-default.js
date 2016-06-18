@@ -99,7 +99,13 @@ var DefaultLoader = exports.DefaultLoader = function (_Loader) {
   };
 
   DefaultLoader.prototype.loadText = function loadText(url) {
-    return this._import(this.applyPluginToUrl(url, this.textPluginName));
+    return this._import(this.applyPluginToUrl(url, this.textPluginName)).then(function (textOrModule) {
+      if (typeof textOrModule === 'string') {
+        return textOrModule;
+      }
+
+      return textOrModule['default'];
+    });
   };
 
   return DefaultLoader;
