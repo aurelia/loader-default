@@ -105,7 +105,13 @@ export class DefaultLoader extends Loader {
   * @return A Promise for text content.
   */
   loadText(url: string): Promise<string> {
-    return this._import(this.applyPluginToUrl(url, this.textPluginName));
+    return this._import(this.applyPluginToUrl(url, this.textPluginName)).then(textOrModule => {
+      if (typeof textOrModule === 'string') {
+        return textOrModule;
+      } else {
+        return textOrModule['default'];
+      }
+    });
   }
 }
 
