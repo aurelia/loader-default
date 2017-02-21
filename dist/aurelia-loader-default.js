@@ -235,7 +235,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 
   DefaultLoader.prototype.map = function(id, source) {
-    System.map[id] = source;
+    System.config({ map: { [id]: source } });
   };
 
   DefaultLoader.prototype.normalizeSync = function(moduleId, relativeTo) {

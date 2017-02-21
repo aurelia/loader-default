@@ -225,7 +225,9 @@ define(['exports', 'aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], functio
     };
 
     DefaultLoader.prototype.map = function (id, source) {
-      System.map[id] = source;
+      var _map;
+
+      System.config({ map: (_map = {}, _map[id] = source, _map) });
     };
 
     DefaultLoader.prototype.normalizeSync = function (moduleId, relativeTo) {

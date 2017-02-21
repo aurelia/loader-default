@@ -1,3 +1,13 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/aurelia/loader-default/compare/1.0.0...v1.0.1) (2017-02-21)
+
+
+### Bug Fixes
+
+* **DefaultLoader:** use config API for map ([a4607b9](https://github.com/aurelia/loader-default/commit/a4607b9))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/aurelia/loader-default/compare/1.0.0-rc.1.0.0...v1.0.0) (2016-07-27)
 
