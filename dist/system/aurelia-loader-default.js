@@ -203,6 +203,30 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
         };
       } else {
         PLATFORM.eachModule = function (callback) {
+          if (System.registry) {
+            for (var _iterator = System.registry.entries(), _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+              var _ref;
+
+              if (_isArray) {
+                if (_i >= _iterator.length) break;
+                _ref = _iterator[_i++];
+              } else {
+                _i = _iterator.next();
+                if (_i.done) break;
+                _ref = _i.value;
+              }
+
+              var _ref2 = _ref;
+              var k = _ref2[0];
+              var m = _ref2[1];
+
+              try {
+                if (callback(k, m)) return;
+              } catch (e) {}
+            }
+            return;
+          }
+
           var modules = System._loader.modules;
 
           for (var key in modules) {

@@ -140,6 +140,15 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 } else {
   PLATFORM.eachModule = function (callback) {
+    if (System.registry) {
+      for (let [k, m] of System.registry.entries()) {
+        try {
+          if (callback(k, m)) return;
+        } catch (e) {}
+      }
+      return;
+    }
+
     let modules = System._loader.modules;
 
     for (let key in modules) {

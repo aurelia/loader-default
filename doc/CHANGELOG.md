@@ -1,3 +1,13 @@
+<a name="1.0.2"></a>
+## [1.0.2](https://github.com/aurelia/loader-default/compare/1.0.1...v1.0.2) (2017-03-23)
+
+
+### Bug Fixes
+
+* **index:** fix PLATFORM.eachModule for SystemJS[@0](https://github.com/0).20.x ([7c2c925](https://github.com/aurelia/loader-default/commit/7c2c925))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/aurelia/loader-default/compare/1.0.0...v1.0.1) (2017-02-21)
 

@@ -192,6 +192,16 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 } else {
   PLATFORM.eachModule = function(callback) {
+    if (System.registry) { // SystemJS >= 0.20.x
+      for (let [k, m] of System.registry.entries()) {
+        try {
+          if (callback(k, m)) return;
+        } catch (e) {}
+      }
+      return;
+    }
+
+    // SystemJS < 0.20.x
     let modules = System._loader.modules;
 
     for (let key in modules) {
