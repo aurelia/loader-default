@@ -180,7 +180,8 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
       const keys = Array.from(System.registry.keys());
       for (let i = 0; i < keys.length; i++) {
         try {
-          if (callback(keys[i], System.registry.get(keys[i]))) { return; }
+          let key = keys[i];
+          if (callback(key, System.registry.get(key))) { return; }
         } catch (e) {}
       }
       return;
