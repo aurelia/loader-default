@@ -177,9 +177,10 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
 } else {
   PLATFORM.eachModule = function(callback) {
     if (System.registry) { // SystemJS >= 0.20.x
-      for (let [k, m] of System.registry.entries()) {
+      const keys = Array.from(System.registry.keys());
+      for (let i = 0; i < keys.length; i++) {
         try {
-          if (callback(k, m)) return;
+          if (callback(keys[i], System.registry.get(keys[i]))) { return; }
         } catch (e) {}
       }
       return;
