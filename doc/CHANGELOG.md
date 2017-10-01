@@ -1,3 +1,18 @@
+<a name="1.0.3"></a>
+## [1.0.3](https://github.com/aurelia/loader-default/compare/1.0.2...v1.0.3) (2017-10-01)
+
+
+### Bug Fixes
+
+* **index:** use .keys instead of .entries close [#43](https://github.com/aurelia/loader-default/issues/43) ([49948a1](https://github.com/aurelia/loader-default/commit/49948a1)), closes [#43](https://github.com/aurelia/loader-default/issues/43)
+
+
+### Performance Improvements
+
+* **index:** single array index for system key ([f5e36b1](https://github.com/aurelia/loader-default/commit/f5e36b1))
+
+
+
 <a name="1.0.2"></a>
 ## [1.0.2](https://github.com/aurelia/loader-default/compare/1.0.1...v1.0.2) (2017-03-23)
 
