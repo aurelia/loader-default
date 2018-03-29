@@ -120,7 +120,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
 
   DefaultLoader.prototype._import = function (moduleId) {
     return new Promise(function (resolve, reject) {
-      require([moduleId], resolve, reject);
+      PLATFORM.global.require([moduleId], resolve, reject);
     });
   };
 
@@ -133,7 +133,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
     }
 
     return new Promise(function (resolve, reject) {
-      require([id], function (m) {
+      PLATFORM.global.require([id], function (m) {
         _this2.moduleRegistry[id] = m;
         resolve(ensureOriginOnExports(m, id));
       }, reject);

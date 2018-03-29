@@ -129,7 +129,7 @@ if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System.i
 
   DefaultLoader.prototype._import = function (moduleId) {
     return new Promise(function (resolve, reject) {
-      require([moduleId], resolve, reject);
+      _aureliaPal.PLATFORM.global.require([moduleId], resolve, reject);
     });
   };
 
@@ -142,7 +142,7 @@ if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System.i
     }
 
     return new Promise(function (resolve, reject) {
-      require([id], function (m) {
+      _aureliaPal.PLATFORM.global.require([id], function (m) {
         _this2.moduleRegistry[id] = m;
         resolve(ensureOriginOnExports(m, id));
       }, reject);

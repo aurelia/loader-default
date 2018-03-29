@@ -97,7 +97,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
 
   DefaultLoader.prototype._import = function (moduleId) {
     return new Promise((resolve, reject) => {
-      require([moduleId], resolve, reject);
+      PLATFORM.global.require([moduleId], resolve, reject);
     });
   };
 
@@ -108,7 +108,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
     }
 
     return new Promise((resolve, reject) => {
-      require([id], m => {
+      PLATFORM.global.require([id], m => {
         this.moduleRegistry[id] = m;
         resolve(ensureOriginOnExports(m, id));
       }, reject);
@@ -126,7 +126,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 
   DefaultLoader.prototype.applyPluginToUrl = function (url, pluginName) {
-    return `${ pluginName }!${ url }`;
+    return `${pluginName}!${url}`;
   };
 
   DefaultLoader.prototype.addPlugin = function (pluginName, implementation) {
@@ -199,7 +199,7 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   };
 
   DefaultLoader.prototype.applyPluginToUrl = function (url, pluginName) {
-    return `${ url }!${ pluginName }`;
+    return `${url}!${pluginName}`;
   };
 
   DefaultLoader.prototype.addPlugin = function (pluginName, implementation) {

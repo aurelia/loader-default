@@ -1,3 +1,14 @@
+<a name="1.0.4"></a>
+## [1.0.4](https://github.com/aurelia/loader-default/compare/1.0.3...1.0.4) (2018-03-29)
+
+
+### Bug Fixes
+
+* fix commonjs build error in requirejs env ([04f6d60](https://github.com/aurelia/loader-default/commit/04f6d60)), closes [#47](https://github.com/aurelia/loader-default/issues/47)
+* improve compatibility with other AMD implementations. ([0f8b5e8](https://github.com/aurelia/loader-default/commit/0f8b5e8)), closes [#48](https://github.com/aurelia/loader-default/issues/48)
+
+
+
 <a name="1.0.3"></a>
 ## [1.0.3](https://github.com/aurelia/loader-default/compare/1.0.2...v1.0.3) (2017-10-01)
 
