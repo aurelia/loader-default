@@ -118,9 +118,20 @@ export class DefaultLoader extends Loader {
 PLATFORM.Loader = DefaultLoader;
 
 if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
-  if (PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+  if (PLATFORM.global.requirejs) {
+    let defined;
+    // Support for requirejs/requirejs
+    if (typeof PLATFORM.global.requirejs.s === 'object') {
+      defined = PLATFORM.global.requirejs.s.contexts._.defined;
+    }
+    // Support for requirejs/alameda
+    else if (typeof PLATFORM.global.requirejs.contexts === 'object') {
+      defined = PLATFORM.global.requirejs.contexts._.defined;
+    }
+    else {
+      throw new Error('Unknown AMD loader');
+    }
     PLATFORM.eachModule = function(callback) {
-      let defined = requirejs.s.contexts._.defined;
       for (let key in defined) {
         try {
           if (callback(key, defined[key])) return;
