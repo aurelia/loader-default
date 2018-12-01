@@ -3,7 +3,7 @@
 System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function (_export, _context) {
   "use strict";
 
-  var TemplateRegistryEntry, Loader, DOM, PLATFORM, Origin, TextTemplateLoader, DefaultLoader;
+  var TemplateRegistryEntry, Loader, DOM, PLATFORM, Origin, _typeof, TextTemplateLoader, DefaultLoader, defined;
 
   function _possibleConstructorReturn(self, call) {
     if (!self) {
@@ -64,6 +64,12 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
       Origin = _aureliaMetadata.Origin;
     }],
     execute: function () {
+      _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+        return typeof obj;
+      } : function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+
       _export('TextTemplateLoader', TextTemplateLoader = function () {
         function TextTemplateLoader() {
           
@@ -143,9 +149,17 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
       PLATFORM.Loader = DefaultLoader;
 
       if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
-        if (PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+        if (PLATFORM.global.requirejs) {
+          defined = void 0;
+
+          if (_typeof(PLATFORM.global.requirejs.s) === 'object') {
+            defined = PLATFORM.global.requirejs.s.contexts._.defined;
+          } else if (_typeof(PLATFORM.global.requirejs.contexts) === 'object') {
+              defined = PLATFORM.global.requirejs.contexts._.defined;
+            } else {
+              throw new Error('Unknown AMD loader');
+            }
           PLATFORM.eachModule = function (callback) {
-            var defined = requirejs.s.contexts._.defined;
             for (var key in defined) {
               try {
                 if (callback(key, defined[key])) return;
@@ -224,12 +238,6 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
             } catch (e) {}
           }
         };
-
-        System.set('text', System.newModule({
-          'translate': function translate(load) {
-            return 'module.exports = "' + load.source.replace(/(["\\])/g, '\\$1').replace(/[\f]/g, '\\f').replace(/[\b]/g, '\\b').replace(/[\n]/g, '\\n').replace(/[\t]/g, '\\t').replace(/[\r]/g, '\\r').replace(/[\u2028]/g, '\\u2028').replace(/[\u2029]/g, '\\u2029') + '";';
-          }
-        }));
 
         DefaultLoader.prototype._import = function (moduleId) {
           return System.import(moduleId);

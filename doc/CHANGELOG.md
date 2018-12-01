@@ -1,3 +1,18 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/aurelia/loader-default/compare/1.0.4...1.1.0) (2018-12-01)
+
+
+### Bug Fixes
+
+* remove unnecessary inline SystemJS text plugin ([8c9a183](https://github.com/aurelia/loader-default/commit/8c9a183)), closes [aurelia/i18n#289](https://github.com/aurelia/i18n/issues/289)
+
+
+### Features
+
+* **loader:** Added support for alameda amd loader ([9b4bb40](https://github.com/aurelia/loader-default/commit/9b4bb40))
+
+
+
 <a name="1.0.4"></a>
 ## [1.0.4](https://github.com/aurelia/loader-default/compare/1.0.3...1.0.4) (2018-03-29)
 

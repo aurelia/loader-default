@@ -82,9 +82,17 @@ export let DefaultLoader = class DefaultLoader extends Loader {
 PLATFORM.Loader = DefaultLoader;
 
 if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
-  if (PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+  if (PLATFORM.global.requirejs) {
+    let defined;
+
+    if (typeof PLATFORM.global.requirejs.s === 'object') {
+      defined = PLATFORM.global.requirejs.s.contexts._.defined;
+    } else if (typeof PLATFORM.global.requirejs.contexts === 'object') {
+        defined = PLATFORM.global.requirejs.contexts._.defined;
+      } else {
+        throw new Error('Unknown AMD loader');
+      }
     PLATFORM.eachModule = function (callback) {
-      let defined = requirejs.s.contexts._.defined;
       for (let key in defined) {
         try {
           if (callback(key, defined[key])) return;
@@ -161,12 +169,6 @@ if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
       } catch (e) {}
     }
   };
-
-  System.set('text', System.newModule({
-    'translate': function (load) {
-      return 'module.exports = "' + load.source.replace(/(["\\])/g, '\\$1').replace(/[\f]/g, '\\f').replace(/[\b]/g, '\\b').replace(/[\n]/g, '\\n').replace(/[\t]/g, '\\t').replace(/[\r]/g, '\\r').replace(/[\u2028]/g, '\\u2028').replace(/[\u2029]/g, '\\u2029') + '";';
-    }
-  }));
 
   DefaultLoader.prototype._import = function (moduleId) {
     return System.import(moduleId);

@@ -6,6 +6,12 @@ define(['exports', 'aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], functio
   });
   exports.DefaultLoader = exports.TextTemplateLoader = undefined;
 
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  };
+
   function _possibleConstructorReturn(self, call) {
     if (!self) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -129,9 +135,17 @@ define(['exports', 'aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], functio
   _aureliaPal.PLATFORM.Loader = DefaultLoader;
 
   if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System.import) {
-    if (_aureliaPal.PLATFORM.global.requirejs && requirejs.s && requirejs.s.contexts && requirejs.s.contexts._ && requirejs.s.contexts._.defined) {
+    if (_aureliaPal.PLATFORM.global.requirejs) {
+      var defined = void 0;
+
+      if (_typeof(_aureliaPal.PLATFORM.global.requirejs.s) === 'object') {
+        defined = _aureliaPal.PLATFORM.global.requirejs.s.contexts._.defined;
+      } else if (_typeof(_aureliaPal.PLATFORM.global.requirejs.contexts) === 'object') {
+          defined = _aureliaPal.PLATFORM.global.requirejs.contexts._.defined;
+        } else {
+          throw new Error('Unknown AMD loader');
+        }
       _aureliaPal.PLATFORM.eachModule = function (callback) {
-        var defined = requirejs.s.contexts._.defined;
         for (var key in defined) {
           try {
             if (callback(key, defined[key])) return;
@@ -210,12 +224,6 @@ define(['exports', 'aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], functio
         } catch (e) {}
       }
     };
-
-    System.set('text', System.newModule({
-      'translate': function translate(load) {
-        return 'module.exports = "' + load.source.replace(/(["\\])/g, '\\$1').replace(/[\f]/g, '\\f').replace(/[\b]/g, '\\b').replace(/[\n]/g, '\\n').replace(/[\t]/g, '\\t').replace(/[\r]/g, '\\r').replace(/[\u2028]/g, '\\u2028').replace(/[\u2029]/g, '\\u2029') + '";';
-      }
-    }));
 
     DefaultLoader.prototype._import = function (moduleId) {
       return System.import(moduleId);
