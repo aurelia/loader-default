@@ -120,16 +120,15 @@ PLATFORM.Loader = DefaultLoader;
 if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   if (PLATFORM.global.requirejs) {
     let defined;
-    // Support for requirejs/requirejs
     if (typeof PLATFORM.global.requirejs.s === 'object') {
+      // Support for requirejs/requirejs
       defined = PLATFORM.global.requirejs.s.contexts._.defined;
-    }
-    // Support for requirejs/alameda
-    else if (typeof PLATFORM.global.requirejs.contexts === 'object') {
+    } else if (typeof PLATFORM.global.requirejs.contexts === 'object') {
+      // Support for requirejs/alameda
       defined = PLATFORM.global.requirejs.contexts._.defined;
-    }
-    else {
-      throw new Error('Unknown AMD loader');
+    } else {
+      // skip any unknown AMD loader
+      defined = {};
     }
     PLATFORM.eachModule = function(callback) {
       for (let key in defined) {
