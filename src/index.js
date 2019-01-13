@@ -119,18 +119,22 @@ PLATFORM.Loader = DefaultLoader;
 
 if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   if (PLATFORM.global.requirejs) {
-    let defined;
+    let getDefined;
     if (typeof PLATFORM.global.requirejs.s === 'object') {
       // Support for requirejs/requirejs
-      defined = PLATFORM.global.requirejs.s.contexts._.defined;
+      getDefined = () => PLATFORM.global.requirejs.s.contexts._.defined;
     } else if (typeof PLATFORM.global.requirejs.contexts === 'object') {
       // Support for requirejs/alameda
-      defined = PLATFORM.global.requirejs.contexts._.defined;
+      getDefined = () => PLATFORM.global.requirejs.contexts._.defined;
+    } else if (typeof PLATFORM.global.requirejs.definedValues === 'function') {
+      // Support for dumberjs/dumber-module-loader
+      getDefined = () => PLATFORM.global.requirejs.definedValues();
     } else {
       // skip any unknown AMD loader
-      defined = {};
+      getDefined = () => ({});
     }
     PLATFORM.eachModule = function(callback) {
+      const defined = getDefined();
       for (let key in defined) {
         try {
           if (callback(key, defined[key])) return;
