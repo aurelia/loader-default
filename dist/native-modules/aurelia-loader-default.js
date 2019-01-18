@@ -108,16 +108,26 @@ PLATFORM.Loader = DefaultLoader;
 
 if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   if (PLATFORM.global.requirejs) {
-    var defined = void 0;
-
+    var getDefined = void 0;
     if (_typeof(PLATFORM.global.requirejs.s) === 'object') {
-      defined = PLATFORM.global.requirejs.s.contexts._.defined;
+      getDefined = function getDefined() {
+        return PLATFORM.global.requirejs.s.contexts._.defined;
+      };
     } else if (_typeof(PLATFORM.global.requirejs.contexts) === 'object') {
-        defined = PLATFORM.global.requirejs.contexts._.defined;
-      } else {
-        throw new Error('Unknown AMD loader');
-      }
+      getDefined = function getDefined() {
+        return PLATFORM.global.requirejs.contexts._.defined;
+      };
+    } else if (typeof PLATFORM.global.requirejs.definedValues === 'function') {
+      getDefined = function getDefined() {
+        return PLATFORM.global.requirejs.definedValues();
+      };
+    } else {
+      getDefined = function getDefined() {
+        return {};
+      };
+    }
     PLATFORM.eachModule = function (callback) {
+      var defined = getDefined();
       for (var key in defined) {
         try {
           if (callback(key, defined[key])) return;

@@ -117,16 +117,26 @@ _aureliaPal.PLATFORM.Loader = DefaultLoader;
 
 if (!_aureliaPal.PLATFORM.global.System || !_aureliaPal.PLATFORM.global.System.import) {
   if (_aureliaPal.PLATFORM.global.requirejs) {
-    var defined = void 0;
-
+    var getDefined = void 0;
     if (_typeof(_aureliaPal.PLATFORM.global.requirejs.s) === 'object') {
-      defined = _aureliaPal.PLATFORM.global.requirejs.s.contexts._.defined;
+      getDefined = function getDefined() {
+        return _aureliaPal.PLATFORM.global.requirejs.s.contexts._.defined;
+      };
     } else if (_typeof(_aureliaPal.PLATFORM.global.requirejs.contexts) === 'object') {
-        defined = _aureliaPal.PLATFORM.global.requirejs.contexts._.defined;
-      } else {
-        throw new Error('Unknown AMD loader');
-      }
+      getDefined = function getDefined() {
+        return _aureliaPal.PLATFORM.global.requirejs.contexts._.defined;
+      };
+    } else if (typeof _aureliaPal.PLATFORM.global.requirejs.definedValues === 'function') {
+      getDefined = function getDefined() {
+        return _aureliaPal.PLATFORM.global.requirejs.definedValues();
+      };
+    } else {
+      getDefined = function getDefined() {
+        return {};
+      };
+    }
     _aureliaPal.PLATFORM.eachModule = function (callback) {
+      var defined = getDefined();
       for (var key in defined) {
         try {
           if (callback(key, defined[key])) return;

@@ -1,3 +1,18 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/aurelia/loader-default/compare/1.1.0...1.2.0) (2019-01-18)
+
+
+### Bug Fixes
+
+* do not reject unsupported AMD loader ([846befe](https://github.com/aurelia/loader-default/commit/846befe))
+
+
+### Features
+
+* add support of dumber-module-loader ([1d9433f](https://github.com/aurelia/loader-default/commit/1d9433f))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/aurelia/loader-default/compare/1.0.4...1.1.0) (2018-12-01)
 

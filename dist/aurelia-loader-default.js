@@ -135,19 +135,22 @@ PLATFORM.Loader = DefaultLoader;
 
 if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
   if (PLATFORM.global.requirejs) {
-    let defined;
-    // Support for requirejs/requirejs
+    let getDefined;
     if (typeof PLATFORM.global.requirejs.s === 'object') {
-      defined = PLATFORM.global.requirejs.s.contexts._.defined;
-    }
-    // Support for requirejs/alameda
-    else if (typeof PLATFORM.global.requirejs.contexts === 'object') {
-      defined = PLATFORM.global.requirejs.contexts._.defined;
-    }
-    else {
-      throw new Error('Unknown AMD loader');
+      // Support for requirejs/requirejs
+      getDefined = () => PLATFORM.global.requirejs.s.contexts._.defined;
+    } else if (typeof PLATFORM.global.requirejs.contexts === 'object') {
+      // Support for requirejs/alameda
+      getDefined = () => PLATFORM.global.requirejs.contexts._.defined;
+    } else if (typeof PLATFORM.global.requirejs.definedValues === 'function') {
+      // Support for dumberjs/dumber-module-loader
+      getDefined = () => PLATFORM.global.requirejs.definedValues();
+    } else {
+      // skip any unknown AMD loader
+      getDefined = () => ({});
     }
     PLATFORM.eachModule = function(callback) {
+      const defined = getDefined();
       for (let key in defined) {
         try {
           if (callback(key, defined[key])) return;

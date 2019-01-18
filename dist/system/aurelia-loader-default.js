@@ -3,7 +3,7 @@
 System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function (_export, _context) {
   "use strict";
 
-  var TemplateRegistryEntry, Loader, DOM, PLATFORM, Origin, _typeof, TextTemplateLoader, DefaultLoader, defined;
+  var TemplateRegistryEntry, Loader, DOM, PLATFORM, Origin, _typeof, TextTemplateLoader, DefaultLoader, getDefined;
 
   function _possibleConstructorReturn(self, call) {
     if (!self) {
@@ -150,16 +150,27 @@ System.register(['aurelia-loader', 'aurelia-pal', 'aurelia-metadata'], function 
 
       if (!PLATFORM.global.System || !PLATFORM.global.System.import) {
         if (PLATFORM.global.requirejs) {
-          defined = void 0;
+          getDefined = void 0;
 
           if (_typeof(PLATFORM.global.requirejs.s) === 'object') {
-            defined = PLATFORM.global.requirejs.s.contexts._.defined;
+            getDefined = function getDefined() {
+              return PLATFORM.global.requirejs.s.contexts._.defined;
+            };
           } else if (_typeof(PLATFORM.global.requirejs.contexts) === 'object') {
-              defined = PLATFORM.global.requirejs.contexts._.defined;
-            } else {
-              throw new Error('Unknown AMD loader');
-            }
+            getDefined = function getDefined() {
+              return PLATFORM.global.requirejs.contexts._.defined;
+            };
+          } else if (typeof PLATFORM.global.requirejs.definedValues === 'function') {
+            getDefined = function getDefined() {
+              return PLATFORM.global.requirejs.definedValues();
+            };
+          } else {
+            getDefined = function getDefined() {
+              return {};
+            };
+          }
           PLATFORM.eachModule = function (callback) {
+            var defined = getDefined();
             for (var key in defined) {
               try {
                 if (callback(key, defined[key])) return;
