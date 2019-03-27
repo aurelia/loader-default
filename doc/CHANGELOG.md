@@ -1,3 +1,8 @@
+<a name="1.2.2"></a>
+## [1.2.2](https://github.com/aurelia/loader-default/compare/1.2.0...1.2.2) (2019-03-27)
+
+
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/aurelia/loader-default/compare/1.2.0...1.2.1) (2019-02-04)
 
