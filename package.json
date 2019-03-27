@@ -1,6 +1,6 @@
 {
   "name": "aurelia-loader-default",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A default implementation of the loader interface compatible with system.js and require-based loaders.",
   "keywords": [
     "aurelia",
@@ -34,16 +34,10 @@
   ],
   "jspm": {
     "registry": "npm",
-    "jspmPackage": true,
     "main": "aurelia-loader-default",
     "format": "amd",
     "directories": {
       "dist": "dist/amd"
-    },
-    "peerDependencies": {
-      "aurelia-loader": "^1.0.0",
-      "aurelia-metadata": "^1.0.0",
-      "aurelia-pal": "^1.0.0"
     },
     "dependencies": {
       "aurelia-loader": "^1.0.0",
